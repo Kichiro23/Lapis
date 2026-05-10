@@ -50,7 +50,7 @@ function CopyButton({ text }: { text: string }) {
   return (
     <button
       onClick={handleCopy}
-      className="ml-2 p-1 rounded-md hover:bg-gray-100 transition-colors"
+      className="ml-2 p-1 rounded-md hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors"
       title="Copy"
     >
       {copied ? <CheckCircle size={14} className="text-green-600" /> : <Copy size={14} className="text-gray-400" />}
@@ -101,8 +101,8 @@ export default function SupportPage() {
           <h2 className="text-lg font-bold mb-4">Payment Methods</h2>
           <div className="flex flex-col gap-4">
             {methods.map((m) => (
-              <div key={m.name} className="flex items-center gap-4 p-4 rounded-2xl" style={{ background: '#f5f2eb' }}>
-                <div className="w-10 h-10 rounded-xl flex items-center justify-center bg-white">
+              <div key={m.name} className="flex items-center gap-4 p-4 rounded-2xl bg-[#f5f2eb] dark:bg-slate-800">
+                <div className="w-10 h-10 rounded-xl flex items-center justify-center bg-white dark:bg-slate-700">
                   {m.icon}
                 </div>
                 <div className="flex-1 min-w-0">
@@ -125,7 +125,7 @@ export default function SupportPage() {
           className="glass-card p-6 text-center"
         >
           <p className="text-sm font-semibold mb-2">Monthly Donation Goal</p>
-          <div className="w-full h-3 rounded-full bg-gray-200 overflow-hidden mb-2">
+          <div className="w-full h-3 rounded-full bg-gray-200 dark:bg-slate-700 overflow-hidden mb-2">
             <div className="h-full rounded-full" style={{ width: '35%', background: '#f6e336' }} />
           </div>
           <p className="text-xs" style={{ color: 'var(--text-secondary)' }}>
@@ -147,8 +147,7 @@ export default function SupportPage() {
             {['Anonymous', 'Juan D.', 'Mika R.', 'Sophia T.', 'Carlos M.', 'Anonymous', 'Anna L.'].map((name) => (
               <span
                 key={name}
-                className="text-xs font-medium px-3 py-1.5 rounded-full bg-white border"
-                style={{ borderColor: 'rgba(0,0,0,0.06)' }}
+                className="text-xs font-medium px-3 py-1.5 rounded-full bg-white dark:bg-slate-800 border border-black/[0.06] dark:border-white/10"
               >
                 {name}
               </span>

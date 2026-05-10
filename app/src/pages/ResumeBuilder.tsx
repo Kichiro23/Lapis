@@ -24,6 +24,7 @@ export default function ResumeBuilder() {
     projects: [{ name: '', description: '', link: '' }],
   })
   const [generating, setGenerating] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
   const updateField = (field: keyof ResumeData, value: string) => {
     setData(prev => ({ ...prev, [field]: value }))
@@ -57,6 +58,7 @@ export default function ResumeBuilder() {
   const removeSkill = (idx: number) => setData(prev => ({ ...prev, skills: prev.skills.filter((_, i) => i !== idx) }))
 
   const generatePdf = async () => {
+    setError(null)
     setGenerating(true)
     const content = [
       `# ${data.fullName}`,
@@ -83,21 +85,11 @@ export default function ResumeBuilder() {
       const blob = await res.blob()
       downloadBlob(blob, `${data.fullName.replace(/\s+/g, '_')}_Resume.pdf`)
     } catch {
-      alert('PDF generation failed. Please try again.')
+      setError('PDF generation failed. Please try again.')
     } finally {
       setGenerating(false)
     }
   }
-
-  const Section = ({ title, icon: Icon, children }: { title: string; icon: any; children: React.ReactNode }) => (
-    <div className="glass-card p-5 sm:p-6 mb-5">
-      <div className="flex items-center gap-2 mb-4">
-        <Icon size={16} className="text-yellow-600 dark:text-yellow-400" />
-        <h3 className="text-sm font-bold">{title}</h3>
-      </div>
-      {children}
-    </div>
-  )
 
   return (
     <div className="min-h-[100dvh] pt-28 pb-20 px-4 md:px-6 bg-slate-50 dark:bg-slate-950">
@@ -112,6 +104,8 @@ export default function ResumeBuilder() {
             Build a clean, ATS-friendly resume and export as PDF.
           </p>
         </motion.div>
+
+        {error && <p className="text-sm text-red-500 mb-4">{error}</p>}
 
         {/* Personal Info */}
         <Section title="Personal Information" icon={User}>

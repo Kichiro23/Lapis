@@ -32,7 +32,7 @@ export default function EssayGrader() {
     try {
       const data = await api.aiEssayGrade(essay)
       setResult(data)
-    } catch (e: any) {
+    } catch (e) {
       setError(e.message || 'Failed to grade essay. Please try again.')
     } finally {
       setLoading(false)

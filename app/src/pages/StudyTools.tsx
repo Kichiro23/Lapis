@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import {
@@ -17,6 +17,7 @@ import {
   Calendar,
 } from 'lucide-react'
 import { api } from '../lib/api'
+import { decodeHtml } from '../lib/utils'
 
 interface Flashcard {
   id: string
@@ -269,8 +270,10 @@ function TriviaView({ onBack }: { onBack: () => void }) {
   const [loading, setLoading] = useState(false)
   const [answers, setAnswers] = useState<Record<number, string>>({})
   const [showResults, setShowResults] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
   const load = async () => {
+    setError(null)
     setLoading(true)
     try {
       const data = await api.getTrivia(5)
@@ -278,7 +281,7 @@ function TriviaView({ onBack }: { onBack: () => void }) {
       setAnswers({})
       setShowResults(false)
     } catch (e) {
-      alert('Failed to load trivia')
+      setError('Failed to load trivia')
     } finally {
       setLoading(false)
     }
@@ -299,6 +302,7 @@ function TriviaView({ onBack }: { onBack: () => void }) {
         </button>
         <h2 className="text-2xl font-bold mb-1">Trivia Quiz</h2>
         <p className="text-sm mb-5" style={{ color: 'var(--text-secondary)' }}>Powered by Open Trivia Database</p>
+        {error && <p className="text-sm text-red-500 mb-3">{error}</p>}
         <button onClick={load} disabled={loading} className="pill-btn pill-btn-primary mb-5 flex items-center gap-2 disabled:opacity-50">
           {loading ? <Loader2 size={14} className="animate-spin" /> : 'Load New Questions'}
         </button>
@@ -308,7 +312,7 @@ function TriviaView({ onBack }: { onBack: () => void }) {
           return (
             <motion.div key={i} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.1 }} className="glass-card p-5 mb-3">
               <p className="text-xs font-bold uppercase tracking-wider text-yellow-600 mb-2">{q.category}</p>
-              <p className="text-sm font-medium mb-3" dangerouslySetInnerHTML={{ __html: `${i + 1}. ${q.question}` }} />
+              <p className="text-sm font-medium mb-3">{i + 1}. {decodeHtml(q.question)}</p>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                 {allAnswers.map((ans: string) => {
                   const isSelected = answers[i] === ans
@@ -319,12 +323,12 @@ function TriviaView({ onBack }: { onBack: () => void }) {
                       key={ans}
                       onClick={() => selectAnswer(i, ans)}
                       className={`text-xs font-medium px-3 py-2 rounded-xl text-left transition-all ${
-                        isCorrect ? 'bg-green-100 text-green-700 border border-green-300' :
-                        isWrong ? 'bg-red-100 text-red-700 border border-red-300' :
-                        isSelected ? 'bg-yellow-100 text-yellow-800 border border-yellow-300' :
-                        'bg-gray-50 hover:bg-gray-100 border border-transparent'
+                        isCorrect ? 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300 border border-green-300 dark:border-green-700' :
+                        isWrong ? 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300 border border-red-300 dark:border-red-700' :
+                        isSelected ? 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-800 dark:text-yellow-300 border border-yellow-300 dark:border-yellow-700' :
+                        'bg-gray-50 dark:bg-slate-800 hover:bg-gray-100 dark:hover:bg-slate-700 border border-transparent dark:border-slate-700 dark:text-gray-300'
                       }`}
-                      dangerouslySetInnerHTML={{ __html: ans }}
+                      {decodeHtml(ans)}
                     />
                   )
                 })}
@@ -356,16 +360,18 @@ function DictionaryView({ onBack }: { onBack: () => void }) {
   const [word, setWord] = useState('')
   const [result, setResult] = useState<any>(null)
   const [loading, setLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
   const search = async () => {
     if (!word.trim()) return
+    setError(null)
     setLoading(true)
     try {
       const data = await api.getDefinition(word.trim().toLowerCase())
       setResult(data[0])
     } catch (e) {
       setResult(null)
-      alert('Word not found')
+      setError('Word not found')
     } finally {
       setLoading(false)
     }
@@ -379,6 +385,7 @@ function DictionaryView({ onBack }: { onBack: () => void }) {
         </button>
         <h2 className="text-2xl font-bold mb-1">Dictionary</h2>
         <p className="text-sm mb-5" style={{ color: 'var(--text-secondary)' }}>Powered by Free Dictionary API</p>
+        {error && <p className="text-sm text-red-500 mb-3">{error}</p>}
         <div className="flex gap-2 mb-5">
           <input
             type="text"

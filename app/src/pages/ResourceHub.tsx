@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { BookOpen, ExternalLink, Search, Code, Scale, Beaker, Calculator, Globe, Video, FileText, Music, Palette, Database, BrainCircuit, Library, Languages, Newspaper, Trophy } from 'lucide-react'
+import { BookOpen, ExternalLink, Search, Code, Beaker, Calculator, Globe, Video, FileText, Palette, Database, BrainCircuit, Library, Newspaper, Trophy } from 'lucide-react'
 
 const categories = ['All', 'Textbooks', 'Coding', 'Law', 'Science', 'Math', 'Languages', 'Videos', 'Arts', 'Data', 'Research']
 

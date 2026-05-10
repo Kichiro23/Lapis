@@ -52,15 +52,13 @@ export default function AboutPage() {
               href="https://github.com/Kichiro23"
               target="_blank"
               rel="noopener noreferrer"
-              className="w-10 h-10 rounded-full border flex items-center justify-center hover:bg-yellow-50 transition-colors"
-              style={{ borderColor: 'rgba(0,0,0,0.1)' }}
+              className="w-10 h-10 rounded-full border border-black/10 dark:border-white/10 flex items-center justify-center hover:bg-yellow-50 dark:hover:bg-yellow-900/20 transition-colors"
             >
               <Github size={16} />
             </a>
             <a
               href="mailto:rommeld216@gmail.com"
-              className="w-10 h-10 rounded-full border flex items-center justify-center hover:bg-yellow-50 transition-colors"
-              style={{ borderColor: 'rgba(0,0,0,0.1)' }}
+              className="w-10 h-10 rounded-full border border-black/10 dark:border-white/10 flex items-center justify-center hover:bg-yellow-50 dark:hover:bg-yellow-900/20 transition-colors"
             >
               <Mail size={16} />
             </a>
@@ -117,8 +115,7 @@ export default function AboutPage() {
             {stack.map((s) => (
               <span
                 key={s.name}
-                className="text-xs font-medium px-3 py-1.5 rounded-full bg-white border"
-                style={{ borderColor: 'rgba(0,0,0,0.06)' }}
+                className="text-xs font-medium px-3 py-1.5 rounded-full bg-white dark:bg-slate-800 border border-black/[0.06] dark:border-white/10"
               >
                 {s.name} <span className="text-gray-400">· {s.category}</span>
               </span>

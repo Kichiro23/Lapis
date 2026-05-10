@@ -1,5 +1,7 @@
 import { createContext, useContext, useState, useEffect, useCallback } from 'react'
 
+const API_BASE = import.meta.env.VITE_API_URL || '/api'
+
 interface User {
   id: string
   name: string
@@ -29,7 +31,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     const token = localStorage.getItem('lapis_token')
     if (token) {
-      fetch('/api/me', { headers: { Authorization: `Bearer ${token}` } })
+      fetch(`${API_BASE}/me`, { headers: { Authorization: `Bearer ${token}` } })
         .then(r => r.ok ? r.json() : null)
         .then(data => { if (data) setUser(data) })
         .catch(() => {})
@@ -40,7 +42,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, [])
 
   const login = useCallback(async (email: string, password: string) => {
-    const res = await fetch('/api/login', {
+    const res = await fetch(`${API_BASE}/login`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email, password }),
@@ -52,7 +54,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, [])
 
   const register = useCallback(async (name: string, email: string, password: string) => {
-    const res = await fetch('/api/register', {
+    const res = await fetch(`${API_BASE}/register`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ name, email, password }),
@@ -66,7 +68,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const logout = useCallback(() => {
     const token = localStorage.getItem('lapis_token')
     if (token) {
-      fetch('/api/logout', { headers: { Authorization: `Bearer ${token}` } }).catch(() => {})
+      fetch(`${API_BASE}/logout`, { headers: { Authorization: `Bearer ${token}` } }).catch(() => {})
     }
     localStorage.removeItem('lapis_token')
     setUser(null)

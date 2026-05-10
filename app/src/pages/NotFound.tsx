@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { Home, Search, ArrowLeft } from 'lucide-react'
+import { Home, ArrowLeft } from 'lucide-react'
 
 export default function NotFound() {
   return (
@@ -27,7 +27,7 @@ export default function NotFound() {
           </button>
         </div>
 
-        <div className="mt-10 pt-8 border-t" style={{ borderColor: 'rgba(0,0,0,0.06)' }}>
+        <div className="mt-10 pt-8 border-t border-black/[0.06] dark:border-white/10">
           <p className="text-xs font-semibold mb-3" style={{ color: 'var(--text-secondary)' }}>
             Popular Pages
           </p>
@@ -41,8 +41,7 @@ export default function NotFound() {
               <Link
                 key={link.href}
                 to={link.href}
-                className="text-xs font-medium px-3 py-1.5 rounded-full bg-white border hover:bg-yellow-50 transition-colors"
-                style={{ borderColor: 'rgba(0,0,0,0.08)' }}
+                className="text-xs font-medium px-3 py-1.5 rounded-full bg-white dark:bg-slate-800 border border-black/[0.08] dark:border-white/10 hover:bg-yellow-50 dark:hover:bg-yellow-900/20 transition-colors"
               >
                 {link.label}
               </Link>

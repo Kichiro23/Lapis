@@ -4,7 +4,6 @@ import { motion } from 'framer-motion'
 import {
   Calculator,
   Search,
-  GraduationCap,
   BookOpen,
   Clock,
   Briefcase,
@@ -82,7 +81,7 @@ export default function Dashboard() {
           {[
             { icon: TrendingUp, label: 'Current GWA', value: '—', color: 'text-yellow-500' },
             { icon: Award, label: 'Scholarships', value: `${scholarshipCount}+ Available`, color: 'text-emerald-500' },
-            { icon: Clock, label: 'Focus This Week', value: '—', color: 'text-sky-500' },
+            { icon: BookOpen, label: 'Universities', value: `${uniCount}+ Listed`, color: 'text-sky-500' },
             { icon: Bell, label: 'Deadlines', value: `${deadlines.filter(d => d.urgent).length} Urgent`, color: 'text-rose-500' },
           ].map((stat) => (
             <div key={stat.label} className="glass-card p-4">

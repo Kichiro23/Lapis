@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { X, GraduationCap, Mail, Lock, User, AlertCircle } from 'lucide-react'
 import { useAuth } from '../hooks/useAuth'
@@ -18,6 +18,13 @@ export default function AuthModal({ open, onClose, mode, onToggleMode }: AuthMod
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
 
+  useEffect(() => {
+    if (!open) return
+    const handleKey = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose() }
+    window.addEventListener('keydown', handleKey)
+    return () => window.removeEventListener('keydown', handleKey)
+  }, [open, onClose])
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setError('')
@@ -29,8 +36,8 @@ export default function AuthModal({ open, onClose, mode, onToggleMode }: AuthMod
         await register(name, email, password)
       }
       onClose()
-    } catch (err: any) {
-      setError(err.message || 'Something went wrong')
+    } catch (err) {
+      setError((err as Error).message || 'Something went wrong')
     } finally {
       setLoading(false)
     }
@@ -56,7 +63,7 @@ export default function AuthModal({ open, onClose, mode, onToggleMode }: AuthMod
             className="relative w-full max-w-[420px] rounded-[32px] p-8 bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl shadow-2xl"
             onClick={(e) => e.stopPropagation()}
           >
-            <button onClick={onClose} className="absolute top-4 right-4 w-10 h-10 rounded-full flex items-center justify-center hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+            <button onClick={onClose} aria-label="Close authentication modal" className="absolute top-4 right-4 w-10 h-10 rounded-full flex items-center justify-center hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
               <X size={18} />
             </button>
 
@@ -64,7 +71,7 @@ export default function AuthModal({ open, onClose, mode, onToggleMode }: AuthMod
               <div className="w-14 h-14 rounded-full flex items-center justify-center mb-3 bg-gradient-to-br from-yellow-400 to-amber-500">
                 <GraduationCap size={28} className="text-slate-900" strokeWidth={2} />
               </div>
-              <h2 className="text-xl font-bold">{mode === 'login' ? 'Welcome Back' : 'Join Lapis'}</h2>
+              <h2 id="auth-title" className="text-xl font-bold">{mode === 'login' ? 'Welcome Back' : 'Join Lapis'}</h2>
               <p className="text-sm text-slate-500 mt-1">
                 {mode === 'login' ? 'Sign in to your account' : 'Create your free account'}
               </p>

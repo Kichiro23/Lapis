@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const axios = require('axios');
 const crypto = require('crypto');
+const bcrypt = require('bcryptjs');
 const { PDFDocument, rgb, StandardFonts } = require('pdf-lib');
 const { Document, Packer, Paragraph, TextRun, HeadingLevel, AlignmentType } = require('docx');
 
@@ -15,10 +16,15 @@ const PORT = process.env.PORT || 3001;
 const users = new Map(); // email -> { id, name, email, passwordHash }
 const sessions = new Map(); // token -> { userId, expires }
 
-const JWT_SECRET = process.env.JWT_SECRET || 'lapis-dev-secret-change-in-production';
+const JWT_SECRET = process.env.JWT_SECRET;
+if (!JWT_SECRET) throw new Error('JWT_SECRET required');
 
 function hashPassword(password) {
-  return crypto.createHmac('sha256', JWT_SECRET).update(password).digest('hex');
+  return bcrypt.hashSync(password, 12);
+}
+
+function verifyPassword(password, hash) {
+  return bcrypt.compareSync(password, hash);
 }
 
 function generateToken(userId) {
@@ -38,7 +44,7 @@ function verifyToken(token) {
 }
 
 function authMiddleware(req, res, next) {
-  const token = req.headers.authorization?.replace('Bearer ', '');
+  const token = req.headers.authorization?.replace(/^Bearer\s+/i, '');
   const userId = verifyToken(token);
   if (!userId) return res.status(401).json({ error: 'Unauthorized' });
   req.userId = userId;
@@ -75,7 +81,7 @@ app.post('/api/login', (req, res) => {
     return res.status(400).json({ error: 'Email and password required' });
   }
   const user = users.get(email.toLowerCase());
-  if (!user || user.passwordHash !== hashPassword(password)) {
+  if (!user || !verifyPassword(password, user.passwordHash)) {
     return res.status(401).json({ error: 'Invalid email or password' });
   }
   const token = generateToken(user.id);
@@ -89,7 +95,7 @@ app.get('/api/me', authMiddleware, (req, res) => {
 });
 
 app.post('/api/logout', authMiddleware, (req, res) => {
-  const token = req.headers.authorization?.replace('Bearer ', '');
+  const token = req.headers.authorization?.replace(/^Bearer\s+/i, '');
   sessions.delete(token);
   res.json({ status: 'ok' });
 });
@@ -105,10 +111,10 @@ app.get('/api/health', (req, res) => {
 app.get('/api/dictionary/:word', async (req, res) => {
   try {
     const { word } = req.params;
-    const response = await axios.get(`https://api.dictionaryapi.dev/api/v2/entries/en/${word}`, { timeout: 8000 });
+    const response = await axios.get(`https://api.dictionaryapi.dev/api/v2/entries/en/${encodeURIComponent(word)}`, { timeout: 8000 });
     res.json(response.data);
   } catch (error) {
-    res.status(404).json({ error: 'Word not found', message: error.message });
+    res.status(404).json({ error: 'Word not found' });
   }
 });
 
@@ -123,7 +129,7 @@ app.get('/api/trivia', async (req, res) => {
     const response = await axios.get(`https://opentdb.com/api.php?${params.toString()}`, { timeout: 8000 });
     res.json(response.data);
   } catch (error) {
-    res.status(500).json({ error: 'Failed to fetch trivia', message: error.message });
+    res.status(503).json({ error: 'Service unavailable' });
   }
 });
 
@@ -131,10 +137,10 @@ app.get('/api/trivia', async (req, res) => {
 app.get('/api/exchange-rates', async (req, res) => {
   try {
     const { base = 'PHP' } = req.query;
-    const response = await axios.get(`https://api.exchangerate-api.com/v4/latest/${base}`, { timeout: 8000 });
+    const response = await axios.get(`https://api.exchangerate-api.com/v4/latest/${encodeURIComponent(base)}`, { timeout: 8000 });
     res.json(response.data);
   } catch (error) {
-    res.status(500).json({ error: 'Failed to fetch exchange rates', message: error.message });
+    res.status(503).json({ error: 'Service unavailable' });
   }
 });
 
@@ -142,10 +148,10 @@ app.get('/api/exchange-rates', async (req, res) => {
 app.get('/api/numbers/:type/:number', async (req, res) => {
   try {
     const { type, number } = req.params;
-    const response = await axios.get(`http://numbersapi.com/${number}/${type}?json`, { timeout: 8000 });
+    const response = await axios.get(`http://numbersapi.com/${encodeURIComponent(number)}/${encodeURIComponent(type)}?json`, { timeout: 8000 });
     res.json(response.data);
   } catch (error) {
-    res.status(500).json({ error: 'Failed to fetch number fact', message: error.message });
+    res.status(503).json({ error: 'Service unavailable' });
   }
 });
 
@@ -156,7 +162,7 @@ app.get('/api/wiki/:title', async (req, res) => {
     const response = await axios.get(`https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(title)}`, { timeout: 8000 });
     res.json(response.data);
   } catch (error) {
-    res.status(404).json({ error: 'Article not found', message: error.message });
+    res.status(404).json({ error: 'Article not found' });
   }
 });
 
@@ -169,7 +175,7 @@ app.get('/api/universities', async (req, res) => {
     const response = await axios.get(url, { timeout: 8000 });
     res.json(response.data);
   } catch (error) {
-    res.status(500).json({ error: 'Failed to fetch universities', message: error.message });
+    res.status(503).json({ error: 'Service unavailable' });
   }
 });
 
@@ -357,7 +363,7 @@ app.get('/api/scholarships', (req, res) => {
       link: 'https://www.dfat.gov.au/people-to-people/australia-awards',
     },
     {
-      id: ' DAAD',
+      id: 'daad',
       name: 'DAAD Scholarships (Germany)',
       type: 'International',
       amount: '€850-€1,200/month + insurance',
@@ -691,7 +697,8 @@ app.get('/api/careers/:course', (req, res) => {
     },
   };
   const course = req.params.course;
-  const data = careers[course] || careers['Computer Science'];
+  const data = careers[course];
+  if (!data) return res.status(404).json({ error: 'Course not found' });
   res.json(data);
 });
 
@@ -699,6 +706,9 @@ app.get('/api/careers/:course', (req, res) => {
 app.post('/api/generate-pdf', async (req, res) => {
   try {
     const { title, content, type = 'document' } = req.body;
+    if (typeof content !== 'string') {
+      return res.status(400).json({ error: 'Content must be a string' });
+    }
     const pdfDoc = await PDFDocument.create();
     const page = pdfDoc.addPage([612, 792]); // Letter size
     const { width, height } = page.getSize();
@@ -732,6 +742,7 @@ app.post('/api/generate-pdf', async (req, res) => {
     for (const line of lines) {
       if (y < 50) {
         const newPage = pdfDoc.addPage([612, 792]);
+        page = newPage;
         y = newPage.getSize().height - 50;
       }
       const text = line.trim();
@@ -761,10 +772,11 @@ app.post('/api/generate-pdf', async (req, res) => {
 
     const pdfBytes = await pdfDoc.save();
     res.setHeader('Content-Type', 'application/pdf');
-    res.setHeader('Content-Disposition', `attachment; filename="${(title || 'document').replace(/\s+/g, '_')}.pdf"`);
+    const safeName = (title || 'document').replace(/[^a-z0-9_\-\.]/gi, '_').slice(0, 100);
+    res.setHeader('Content-Disposition', `attachment; filename="${safeName}.pdf"`);
     res.send(Buffer.from(pdfBytes));
   } catch (error) {
-    res.status(500).json({ error: 'PDF generation failed', message: error.message });
+    res.status(500).json({ error: 'PDF generation failed' });
   }
 });
 
@@ -772,6 +784,9 @@ app.post('/api/generate-pdf', async (req, res) => {
 app.post('/api/generate-word', async (req, res) => {
   try {
     const { title, content } = req.body;
+    if (typeof content !== 'string') {
+      return res.status(400).json({ error: 'Content must be a string' });
+    }
     const lines = (content || '').split('\n').filter((l) => l.trim());
 
     const doc = new Document({
@@ -806,10 +821,11 @@ app.post('/api/generate-word', async (req, res) => {
 
     const buffer = await Packer.toBuffer(doc);
     res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document');
-    res.setHeader('Content-Disposition', `attachment; filename="${(title || 'document').replace(/\s+/g, '_')}.docx"`);
+    const safeName = (title || 'document').replace(/[^a-z0-9_\-\.]/gi, '_').slice(0, 100);
+    res.setHeader('Content-Disposition', `attachment; filename="${safeName}.docx"`);
     res.send(buffer);
   } catch (error) {
-    res.status(500).json({ error: 'Word generation failed', message: error.message });
+    res.status(500).json({ error: 'Word generation failed' });
   }
 });
 
@@ -844,6 +860,9 @@ app.post('/api/gwa-pdf', async (req, res) => {
     page.drawText('Grade', { x: 380, y, size: 11, font: boldFont });
     y -= 25;
 
+    if (!Array.isArray(courses)) {
+      return res.status(400).json({ error: 'Courses must be an array' });
+    }
     for (const course of courses || []) {
       page.drawText(course.name || '', { x: 55, y, size: 11, font });
       page.drawText(String(course.units || ''), { x: 300, y, size: 11, font });
@@ -866,7 +885,7 @@ app.post('/api/gwa-pdf', async (req, res) => {
     res.setHeader('Content-Disposition', 'attachment; filename="GWA_Report.pdf"');
     res.send(Buffer.from(pdfBytes));
   } catch (error) {
-    res.status(500).json({ error: 'GWA PDF generation failed', message: error.message });
+    res.status(500).json({ error: 'GWA PDF generation failed' });
   }
 });
 
@@ -970,7 +989,7 @@ app.post('/api/ai-chat', async (req, res) => {
 
     const systemPrompt = `You are Lapis Assistant, a helpful AI study assistant for Filipino students. You provide accurate, friendly, and concise answers about academics, scholarships, universities, careers, and study strategies.
 
-Context about the user: ${context || 'Student using Lapis platform'}
+Context about the user: ${(context || 'Student using Lapis platform').replace(/"""/g, '').replace(/`/g, '')}
 
 Guidelines:
 - Keep responses under 200 words
@@ -1003,7 +1022,7 @@ Guidelines:
     console.error('AI Chat Error:', error.message);
     // Fallback on API failure
     const lastMessage = req.body.messages?.[req.body.messages.length - 1]?.content || '';
-    res.json({
+    res.status(503).json({
       response: getFallbackResponse(lastMessage),
       source: 'fallback',
       error: 'AI service temporarily unavailable'
@@ -1052,7 +1071,7 @@ app.post('/api/ai-essay-grade', async (req, res) => {
     const prompt = `Grade the following student essay on a scale of 0-100. Provide scores for: Structure, Grammar, Argument Strength, and Vocabulary. Also give 3-4 specific improvement suggestions.
 
 Essay:
-"""${essay}"""
+"""${essay.replace(/"""/g, '').replace(/`/g, '')}"""
 
 Respond ONLY in valid JSON format:
 {
@@ -1081,7 +1100,7 @@ Respond ONLY in valid JSON format:
     res.json({ ...result, source: 'groq' });
   } catch (error) {
     console.error('Essay Grade Error:', error.message);
-    res.status(500).json({ error: 'Essay grading failed', message: error.message });
+    res.status(503).json({ error: 'Service unavailable' });
   }
 });
 
@@ -1121,7 +1140,7 @@ app.post('/api/ai-study-plan', async (req, res) => {
 Subjects: ${subjects.map(s => s.name || s).join(', ')}
 Exam date: ${examDate || 'Not specified'}
 Hours per day: ${hoursPerDay || '4'}
-Preferences: ${JSON.stringify(preferences || {})}
+Preferences: ${JSON.stringify(preferences || {}).replace(/"""/g, '').replace(/`/g, '')}
 
 Respond in JSON:
 {
@@ -1155,8 +1174,13 @@ Respond in JSON:
     res.json({ ...result, source: 'groq' });
   } catch (error) {
     console.error('Study Plan Error:', error.message);
-    res.status(500).json({ error: 'Study plan generation failed', message: error.message });
+    res.status(503).json({ error: 'Service unavailable' });
   }
+});
+
+app.use((err, req, res, next) => {
+  console.error(err);
+  res.status(500).json({ error: 'Internal server error' });
 });
 
 app.listen(PORT, () => {

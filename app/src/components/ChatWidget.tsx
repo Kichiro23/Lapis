@@ -97,6 +97,7 @@ export default function ChatWidget() {
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.95 }}
             onClick={() => setOpen(true)}
+            aria-label="Open chat assistant"
             className="fixed bottom-5 right-5 z-50 w-14 h-14 rounded-full flex items-center justify-center shadow-lg"
             style={{
               background: 'linear-gradient(135deg, #f6e336, #f2db27)',
@@ -146,6 +147,7 @@ export default function ChatWidget() {
               </div>
               <button
                 onClick={() => setOpen(false)}
+                aria-label="Close chat"
                 className="w-8 h-8 rounded-full flex items-center justify-center hover:bg-gray-100 transition-colors"
               >
                 <X size={16} />
@@ -153,7 +155,7 @@ export default function ChatWidget() {
             </div>
 
             {/* Messages */}
-            <div ref={scrollRef} className="flex-1 overflow-y-auto px-4 py-3 flex flex-col gap-3">
+            <div ref={scrollRef} className="flex-1 overflow-y-auto px-4 py-3 flex flex-col gap-3" aria-live="polite" aria-atomic="false">
               {messages.map((msg) => (
                 <div
                   key={msg.id}

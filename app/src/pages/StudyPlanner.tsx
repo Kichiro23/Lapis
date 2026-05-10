@@ -61,7 +61,7 @@ export default function StudyPlanner() {
         { pomodoro: usePomodoro }
       )
       setResult(data)
-    } catch (e: any) {
+    } catch (e) {
       setError(e.message || 'Failed to generate study plan. Please try again.')
     } finally {
       setLoading(false)

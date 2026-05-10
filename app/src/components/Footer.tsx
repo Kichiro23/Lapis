@@ -45,12 +45,14 @@ export default function Footer() {
                 href="https://github.com/Kichiro23"
                 target="_blank"
                 rel="noopener noreferrer"
+                aria-label="GitHub profile"
                 className="w-9 h-9 rounded-full border border-slate-200 dark:border-slate-700 flex items-center justify-center hover:bg-yellow-50 dark:hover:bg-yellow-900/20 transition-colors"
               >
                 <Github size={14} />
               </a>
               <a
                 href="mailto:rommeld216@gmail.com"
+                aria-label="Send email"
                 className="w-9 h-9 rounded-full border border-slate-200 dark:border-slate-700 flex items-center justify-center hover:bg-yellow-50 dark:hover:bg-yellow-900/20 transition-colors"
               >
                 <Mail size={14} />

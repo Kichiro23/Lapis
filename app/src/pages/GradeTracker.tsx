@@ -26,6 +26,7 @@ export default function GradeTracker() {
   })
   const [newSemesterName, setNewSemesterName] = useState('')
   const [showAddSemester, setShowAddSemester] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
     localStorage.setItem('lapis_grades', JSON.stringify(semesters))
@@ -95,6 +96,7 @@ export default function GradeTracker() {
   const overallGWA = computeGWA(semesters.flatMap((s) => s.courses))
 
   const exportPdf = async (sem: Semester) => {
+    setError(null)
     const gwa = computeGWA(sem.courses)
     const honors = getHonors(gwa)
     try {
@@ -109,7 +111,7 @@ export default function GradeTracker() {
       const blob = await res.blob()
       downloadBlob(blob, `GWA_${sem.name.replace(/\s+/g, '_')}.pdf`)
     } catch (e) {
-      alert('PDF export failed. Please try again.')
+      setError('PDF export failed. Please try again.')
     }
   }
 
@@ -136,6 +138,8 @@ export default function GradeTracker() {
             </button>
           </div>
         </motion.div>
+
+        {error && <p className="text-sm text-red-500 mb-4">{error}</p>}
 
         {/* Overall Stats */}
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">

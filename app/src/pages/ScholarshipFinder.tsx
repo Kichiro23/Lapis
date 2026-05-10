@@ -44,11 +44,18 @@ export default function ScholarshipFinder() {
     fetch('/api/scholarships')
       .then((r) => r.json())
       .then((data) => {
-        setScholarships(data.map((s: any) => ({ ...s, matchScore: Math.floor(Math.random() * 30) + 70 })))
+        setScholarships(data.map((s: Scholarship) => ({ ...s, matchScore: Math.floor(Math.random() * 30) + 70 })))
         setLoading(false)
       })
       .catch(() => setLoading(false))
   }, [])
+
+  useEffect(() => {
+    if (!selectedScholar) return
+    const handleKey = (e: KeyboardEvent) => { if (e.key === 'Escape') setSelectedScholar(null) }
+    window.addEventListener('keydown', handleKey)
+    return () => window.removeEventListener('keydown', handleKey)
+  }, [selectedScholar])
 
   const toggleSaved = (id: string) => {
     setSavedIds((prev) => {
@@ -228,9 +235,13 @@ export default function ScholarshipFinder() {
               exit={{ scale: 0.9, y: 20 }}
               className="relative w-full max-w-[560px] max-h-[80vh] overflow-y-auto rounded-[32px] p-6 md:p-8 bg-white/98 dark:bg-slate-900/98 border border-slate-200 dark:border-slate-700"
               onClick={(e) => e.stopPropagation()}
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby="scholar-title"
             >
               <button
                 onClick={() => setSelectedScholar(null)}
+                aria-label="Close scholarship details"
                 className="absolute top-4 right-4 w-10 h-10 rounded-full flex items-center justify-center hover:bg-gray-100 dark:hover:bg-slate-800 transition-colors"
               >
                 <X size={18} />
@@ -241,7 +252,7 @@ export default function ScholarshipFinder() {
                 <span className="text-[10px] font-semibold px-2.5 py-1 rounded-full bg-green-50 dark:bg-green-900/30 text-green-700 dark:text-green-300">{selectedScholar.amount}</span>
               </div>
 
-              <h2 className="text-xl font-bold mb-2">{selectedScholar.name}</h2>
+              <h2 id="scholar-title" className="text-xl font-bold mb-2">{selectedScholar.name}</h2>
               <p className="text-sm leading-relaxed mb-5 dark:text-gray-400" style={{ color: 'var(--text-secondary)' }}>
                 {selectedScholar.description}
               </p>

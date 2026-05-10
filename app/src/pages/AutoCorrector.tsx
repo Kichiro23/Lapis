@@ -24,8 +24,8 @@ export default function AutoCorrector() {
       
       setOutput(correctedMatch ? correctedMatch[1].trim() : text)
       if (changesMatch) {
-        const changeLines = changesMatch[1].trim().split('\n').filter(l => l.trim().startsWith('-'))
-        setChanges(changeLines.map(l => l.trim().substring(1).trim()))
+        const changeLines = changesMatch[1].trim().split('\n').filter((l: string) => l.trim().startsWith('-'))
+        setChanges(changeLines.map((l: string) => l.trim().substring(1).trim()))
       } else {
         setChanges([])
       }

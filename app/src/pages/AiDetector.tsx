@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { Scan, AlertTriangle, CheckCircle, RotateCcw, Shield } from 'lucide-react'
+import { Scan, AlertTriangle, RotateCcw, Shield } from 'lucide-react'
 import { api } from '../lib/api'
 
 export default function AiDetector() {

@@ -85,9 +85,9 @@ export default function SubscribePage() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: i * 0.1 }}
               className={`relative rounded-[32px] p-7 flex flex-col h-full ${
-                plan.primary ? 'ring-2 ring-black/10' : ''
+                plan.primary ? 'ring-2 ring-black/10 dark:ring-white/10' : 'bg-white dark:bg-slate-800'
               }`}
-              style={{ background: plan.primary ? plan.color : '#fff' }}
+              style={plan.primary ? { background: plan.color } : undefined}
             >
               {plan.badge && (
                 <span className="absolute -top-3 left-1/2 -translate-x-1/2 text-[10px] font-bold uppercase tracking-wider px-3 py-1 rounded-full bg-black text-white">
@@ -107,7 +107,7 @@ export default function SubscribePage() {
 
               <div className="mb-6">
                 <span className="text-4xl font-extrabold">{plan.price}</span>
-                <span className="text-sm text-black/60">{plan.period}</span>
+                <span className="text-sm text-black/60 dark:text-white/60">{plan.period}</span>
               </div>
 
               <ul className="flex flex-col gap-2.5 flex-1 mb-6">

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Plus, Trash2, GripVertical, CheckCircle2, Circle, Clock, Calendar, Flag } from 'lucide-react'
+import { Plus, Trash2, CheckCircle2, Circle, Calendar } from 'lucide-react'
 
 interface Task {
   id: string
