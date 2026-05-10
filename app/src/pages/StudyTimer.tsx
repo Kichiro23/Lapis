@@ -132,9 +132,9 @@ export default function StudyTimer() {
             {/* Circular Timer */}
             <div className="flex justify-center mb-6">
               <div className="relative">
-                <svg width="280" height="280" viewBox="0 0 280 280">
+                <svg className="w-[260px] h-[260px] sm:w-[280px] sm:h-[280px]" viewBox="0 0 280 280">
                   {/* Background ring */}
-                  <circle cx="140" cy="140" r={radius} fill="none" stroke="#e9e7e0" strokeWidth="8" />
+                  <circle cx="140" cy="140" r={radius} fill="none" stroke="rgba(255,255,255,0.1)" strokeWidth="8" />
                   {/* Progress ring */}
                   <circle
                     cx="140"
@@ -164,18 +164,18 @@ export default function StudyTimer() {
             {/* Controls */}
             <div className="flex justify-center gap-3">
               {!isRunning ? (
-                <button onClick={startTimer} className="pill-btn text-sm flex items-center gap-1" style={{ background: '#f6e336', color: '#333' }}>
-                  <Play size={14} fill="#333" /> Start
+                <button onClick={startTimer} className="pill-btn text-sm flex items-center gap-1 bg-yellow-400 text-slate-900 hover:bg-yellow-300">
+                  <Play size={14} fill="#0f172a" /> Start
                 </button>
               ) : (
-                <button onClick={pauseTimer} className="pill-btn text-sm flex items-center gap-1" style={{ background: '#f6e336', color: '#333' }}>
+                <button onClick={pauseTimer} className="pill-btn text-sm flex items-center gap-1 bg-yellow-400 text-slate-900 hover:bg-yellow-300">
                   <Pause size={14} /> Pause
                 </button>
               )}
-              <button onClick={resetTimer} className="pill-btn text-sm text-gray-500 hover:bg-gray-100 flex items-center gap-1">
+              <button onClick={resetTimer} className="pill-btn text-sm text-gray-400 hover:bg-slate-700 flex items-center gap-1">
                 <RotateCcw size={14} /> Reset
               </button>
-              <button onClick={skipTimer} className="pill-btn text-sm text-gray-500 hover:bg-gray-100 flex items-center gap-1">
+              <button onClick={skipTimer} className="pill-btn text-sm text-gray-400 hover:bg-slate-700 flex items-center gap-1">
                 <SkipForward size={14} /> Skip
               </button>
             </div>

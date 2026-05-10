@@ -6,6 +6,7 @@ interface User {
   id: string
   name: string
   email: string
+  picture?: string | null
 }
 
 interface AuthContextType {
@@ -13,6 +14,7 @@ interface AuthContextType {
   isLoading: boolean
   login: (email: string, password: string) => Promise<void>
   register: (name: string, email: string, password: string) => Promise<void>
+  loginWithGoogle: (idToken: string) => Promise<void>
   logout: () => void
 }
 
@@ -21,6 +23,7 @@ const AuthContext = createContext<AuthContextType>({
   isLoading: true,
   login: async () => {},
   register: async () => {},
+  loginWithGoogle: async () => {},
   logout: () => {},
 })
 
@@ -65,6 +68,18 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setUser(data.user)
   }, [])
 
+  const loginWithGoogle = useCallback(async (idToken: string) => {
+    const res = await fetch(`${API_BASE}/auth/google`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ idToken }),
+    })
+    const data = await res.json()
+    if (!res.ok) throw new Error(data.error || 'Google login failed')
+    localStorage.setItem('lapis_token', data.token)
+    setUser(data.user)
+  }, [])
+
   const logout = useCallback(() => {
     const token = localStorage.getItem('lapis_token')
     if (token) {
@@ -75,7 +90,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, [])
 
   return (
-    <AuthContext.Provider value={{ user, isLoading, login, register, logout }}>
+    <AuthContext.Provider value={{ user, isLoading, login, register, loginWithGoogle, logout }}>
       {children}
     </AuthContext.Provider>
   )

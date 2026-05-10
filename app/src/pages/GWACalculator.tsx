@@ -330,7 +330,7 @@ export default function GWACalculator() {
               )}
 
               {/* Export */}
-              <div className="flex gap-2 mt-4 pt-4 border-t" style={{ borderColor: 'rgba(0,0,0,0.06)' }}>
+              <div className="flex gap-2 mt-4 pt-4 border-t border-slate-200 dark:border-slate-700">
                 <button
                   onClick={async () => {
                     const res = await api.generateGwaPdf({
@@ -369,8 +369,7 @@ export default function GWACalculator() {
                   {SCHOLARSHIPS.slice(0, 4).map((s) => (
                     <div
                       key={s.name}
-                      className="flex items-center justify-between p-3 rounded-2xl"
-                      style={{ background: '#f5f2eb' }}
+                      className="flex items-center justify-between p-3 rounded-2xl bg-[#f5f2eb] dark:bg-slate-800"
                     >
                       <div>
                         <p className="text-xs font-semibold">{s.name}</p>

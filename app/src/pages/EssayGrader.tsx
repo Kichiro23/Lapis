@@ -83,8 +83,7 @@ export default function EssayGrader() {
             value={essay}
             onChange={(e) => setEssay(e.target.value)}
             placeholder="Paste your essay here (minimum 50 characters)..."
-            className="w-full h-64 p-4 rounded-2xl text-sm resize-none outline-none"
-            style={{ background: '#fff', border: '1px solid rgba(0,0,0,0.06)' }}
+            className="w-full h-64 p-4 rounded-2xl text-sm resize-none outline-none bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 focus:border-yellow-400 transition-colors"
           />
           {error && <p className="text-xs text-red-500 mt-2">{error}</p>}
           <div className="flex gap-3 mt-4">

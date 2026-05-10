@@ -168,8 +168,7 @@ export default function GradeTracker() {
                 placeholder="e.g., 2nd Semester 2025-2026"
                 value={newSemesterName}
                 onChange={(e) => setNewSemesterName(e.target.value)}
-                className="flex-1 text-sm px-4 py-2.5 rounded-2xl outline-none"
-                style={{ background: '#fff', border: '1px solid rgba(0,0,0,0.06)' }}
+                className="input-pill flex-1"
               />
               <button onClick={addSemester} className="pill-btn pill-btn-primary text-xs">Add</button>
               <button onClick={() => setShowAddSemester(false)} className="pill-btn pill-btn-ghost text-xs">Cancel</button>
@@ -203,7 +202,7 @@ export default function GradeTracker() {
                     <span className="text-sm font-bold">GWA: {gwa > 0 ? gwa.toFixed(2) : '—'}</span>
                     <button
                       onClick={() => exportPdf(sem)}
-                      className="w-8 h-8 rounded-full flex items-center justify-center hover:bg-gray-100 transition-colors"
+                      className="w-8 h-8 rounded-full flex items-center justify-center hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors"
                       title="Export PDF"
                     >
                       <Download size={14} />
@@ -221,7 +220,7 @@ export default function GradeTracker() {
                 <div className="overflow-x-auto">
                   <table className="w-full text-sm">
                     <thead>
-                      <tr className="border-b" style={{ borderColor: 'rgba(0,0,0,0.06)' }}>
+                      <tr className="border-b border-slate-200 dark:border-slate-700">
                         <th className="text-left py-2 pr-4 font-semibold text-xs">Course</th>
                         <th className="text-center py-2 px-3 font-semibold text-xs w-20">Units</th>
                         <th className="text-center py-2 px-3 font-semibold text-xs w-20">Grade</th>
@@ -230,7 +229,7 @@ export default function GradeTracker() {
                     </thead>
                     <tbody>
                       {sem.courses.map((course, idx) => (
-                        <tr key={idx} className="border-b" style={{ borderColor: 'rgba(0,0,0,0.04)' }}>
+                        <tr key={idx} className="border-b border-slate-100 dark:border-slate-800">
                           <td className="py-2 pr-4">
                             <input
                               type="text"
@@ -279,7 +278,7 @@ export default function GradeTracker() {
 
                 <button
                   onClick={() => addCourse(sem.id)}
-                  className="mt-3 text-xs font-medium flex items-center gap-1 px-3 py-1.5 rounded-full hover:bg-gray-100 transition-colors"
+                  className="mt-3 text-xs font-medium flex items-center gap-1 px-3 py-1.5 rounded-full hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors"
                   style={{ color: 'var(--text-secondary)' }}
                 >
                   <Plus size={12} /> Add Course

@@ -126,23 +126,20 @@ export default function TaskManager() {
                   placeholder="Task title..."
                   value={newTask.title}
                   onChange={(e) => setNewTask({ ...newTask, title: e.target.value })}
-                  className="text-sm px-4 py-2.5 rounded-2xl outline-none"
-                  style={{ background: '#fff', border: '1px solid rgba(0,0,0,0.06)' }}
+                  className="input-pill"
                 />
                 <input
                   type="date"
                   value={newTask.dueDate}
                   onChange={(e) => setNewTask({ ...newTask, dueDate: e.target.value })}
-                  className="text-sm px-4 py-2.5 rounded-2xl outline-none"
-                  style={{ background: '#fff', border: '1px solid rgba(0,0,0,0.06)' }}
+                  className="input-pill"
                 />
               </div>
               <textarea
                 placeholder="Description (optional)..."
                 value={newTask.description}
                 onChange={(e) => setNewTask({ ...newTask, description: e.target.value })}
-                className="w-full text-sm px-4 py-2.5 rounded-2xl outline-none resize-none h-20 mb-3"
-                style={{ background: '#fff', border: '1px solid rgba(0,0,0,0.06)' }}
+                className="w-full input-pill resize-y h-20 mb-3"
               />
               <div className="flex items-center gap-3 mb-4">
                 <span className="text-xs font-medium">Priority:</span>
@@ -151,7 +148,7 @@ export default function TaskManager() {
                     key={p}
                     onClick={() => setNewTask({ ...newTask, priority: p })}
                     className={`text-xs font-medium px-3 py-1 rounded-full transition-all ${
-                      newTask.priority === p ? 'text-white' : 'bg-gray-100 text-gray-500 hover:bg-gray-200'
+                      newTask.priority === p ? 'text-white' : 'bg-gray-100 dark:bg-slate-700 text-gray-500 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-slate-600'
                     }`}
                     style={newTask.priority === p ? { background: PRIORITY_COLORS[p] } : {}}
                   >
@@ -173,7 +170,7 @@ export default function TaskManager() {
             <div key={col.id} className="flex flex-col">
               <div className="flex items-center justify-between mb-3">
                 <h3 className="text-sm font-bold">{col.label}</h3>
-                <span className="text-xs font-medium px-2 py-0.5 rounded-full bg-white">
+                <span className="text-xs font-medium px-2 py-0.5 rounded-full bg-white dark:bg-slate-800">
                   {tasks.filter((t) => t.status === col.id).length}
                 </span>
               </div>
@@ -247,7 +244,7 @@ export default function TaskManager() {
                             <>
                               <button
                                 onClick={() => moveTask(task.id, 'todo')}
-                                className="text-[9px] font-medium px-2 py-0.5 rounded-full bg-gray-100 text-gray-500 hover:bg-gray-200 transition-colors"
+                                className="text-[9px] font-medium px-2 py-0.5 rounded-full bg-gray-100 dark:bg-slate-700 text-gray-500 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-slate-600 transition-colors"
                               >
                                 Back
                               </button>

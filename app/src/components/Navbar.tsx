@@ -7,6 +7,7 @@ import { useAuth } from '../hooks/useAuth'
 import AuthModal from './AuthModal'
 
 const desktopNavLinks = [
+  { label: 'Tools', href: '/tools' },
   { label: 'GWA', href: '/gwa-calculator' },
   { label: 'Scholarships', href: '/scholarships' },
   { label: 'Universities', href: '/universities' },
@@ -152,7 +153,7 @@ export default function Navbar() {
               className="lg:hidden fixed inset-0 z-40"
               onClick={() => setMobileOpen(false)}
             >
-              <div className="absolute inset-0 bg-black/20 dark:bg-black/40 backdrop-blur-sm" />
+              <div className="absolute inset-0 bg-black/50 dark:bg-black/60 backdrop-blur-sm" />
               <motion.div
                 initial={{ x: '100%' }}
                 animate={{ x: 0 }}

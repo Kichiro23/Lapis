@@ -105,14 +105,12 @@ export default function StudyPlanner() {
                       placeholder={`Subject ${i + 1}`}
                       value={subject.name}
                       onChange={(e) => updateSubject(subject.id, 'name', e.target.value)}
-                      className="flex-1 text-sm px-4 py-2.5 rounded-2xl outline-none"
-                      style={{ background: '#fff', border: '1px solid rgba(0,0,0,0.06)' }}
+                      className="input-pill flex-1"
                     />
                     <select
                       value={subject.priority}
                       onChange={(e) => updateSubject(subject.id, 'priority', e.target.value)}
-                      className="text-sm px-3 py-2.5 rounded-2xl outline-none"
-                      style={{ background: '#fff', border: '1px solid rgba(0,0,0,0.06)' }}
+                      className="input-pill appearance-none cursor-pointer"
                     >
                       <option value="high">High</option>
                       <option value="medium">Medium</option>
@@ -131,7 +129,7 @@ export default function StudyPlanner() {
               </div>
               <button
                 onClick={addSubject}
-                className="mt-3 text-xs font-medium flex items-center gap-1 px-3 py-1.5 rounded-full hover:bg-gray-100 transition-colors"
+                className="mt-3 text-xs font-medium flex items-center gap-1 px-3 py-1.5 rounded-full hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors"
                 style={{ color: 'var(--text-secondary)' }}
               >
                 <Plus size={12} /> Add Subject
@@ -151,8 +149,7 @@ export default function StudyPlanner() {
                     type="date"
                     value={examDate}
                     onChange={(e) => setExamDate(e.target.value)}
-                    className="w-full text-sm px-4 py-2.5 rounded-2xl outline-none"
-                    style={{ background: '#fff', border: '1px solid rgba(0,0,0,0.06)' }}
+                    className="input-pill w-full"
                   />
                 </div>
                 <div>
@@ -222,8 +219,7 @@ export default function StudyPlanner() {
                   {subjectPlan.sessions.map((session, i) => (
                     <div
                       key={i}
-                      className="flex items-center gap-3 p-3 rounded-2xl"
-                      style={{ background: '#f5f2eb' }}
+                      className="flex items-center gap-3 p-3 rounded-2xl bg-[#f5f2eb] dark:bg-slate-800"
                     >
                       <div
                         className="w-8 h-8 rounded-lg flex items-center justify-center text-[10px] font-bold flex-shrink-0"
@@ -239,7 +235,7 @@ export default function StudyPlanner() {
                         {session.resources && session.resources.length > 0 && (
                           <div className="flex flex-wrap gap-1 mt-1">
                             {session.resources.map((r) => (
-                              <span key={r} className="text-[9px] px-2 py-0.5 rounded-full bg-white">{r}</span>
+                              <span key={r} className="text-[9px] px-2 py-0.5 rounded-full bg-white dark:bg-slate-700">{r}</span>
                             ))}
                           </div>
                         )}

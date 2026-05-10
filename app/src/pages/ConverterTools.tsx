@@ -323,7 +323,7 @@ function CurrencyConverter() {
       <p className="text-sm mb-5" style={{ color: 'var(--text-secondary)' }}>Real-time exchange rates powered by exchangerate-api.com</p>
       {error && <p className="text-sm text-red-500 mb-3">{error}</p>}
       <div className="glass-card p-5">
-        <div className="flex flex-col sm:flex-row gap-3 mb-4">
+        <div className="flex flex-col sm:flex-row gap-2 mb-4">
           <input
             type="number"
             value={amount}

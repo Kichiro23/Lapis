@@ -235,7 +235,7 @@ export default function ScholarshipFinder() {
               initial={{ scale: 0.9, y: 20 }}
               animate={{ scale: 1, y: 0 }}
               exit={{ scale: 0.9, y: 20 }}
-              className="relative w-full max-w-[560px] max-h-[80vh] overflow-y-auto rounded-[32px] p-6 md:p-8 bg-white/98 dark:bg-slate-900/98 border border-slate-200 dark:border-slate-700"
+              className="relative w-full max-w-[560px] max-h-[85dvh] overflow-y-auto rounded-[32px] p-6 md:p-8 bg-white/98 dark:bg-slate-900/98 border border-slate-200 dark:border-slate-700"
               onClick={(e) => e.stopPropagation()}
               role="dialog"
               aria-modal="true"

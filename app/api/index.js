@@ -13,7 +13,7 @@ app.use(express.json({ limit: '10mb' }));
 const PORT = process.env.PORT || 3001;
 
 // ─── Simple In-Memory Auth (no DB needed for MVP) ───
-const users = new Map(); // email -> { id, name, email, passwordHash }
+const users = new Map(); // email -> { id, googleId?, name, email, picture?, passwordHash, createdAt }
 const sessions = new Map(); // token -> { userId, expires }
 
 const JWT_SECRET = process.env.JWT_SECRET;
@@ -51,8 +51,27 @@ function authMiddleware(req, res, next) {
   next();
 }
 
+const rateLimits = new Map();
+function rateLimit(key, maxRequests = 10, windowMs = 60000) {
+  const now = Date.now();
+  const windowStart = now - windowMs;
+  const requests = rateLimits.get(key) || [];
+  const recent = requests.filter(t => t > windowStart);
+  if (recent.length >= maxRequests) return false;
+  recent.push(now);
+  rateLimits.set(key, recent);
+  return true;
+}
+
+const rateLimitMiddleware = (maxRequests, windowMs) => (req, res, next) => {
+  if (!rateLimit(req.ip, maxRequests, windowMs)) {
+    return res.status(429).json({ error: 'Too many requests, please try again later' });
+  }
+  next();
+};
+
 // Auth endpoints
-app.post('/api/register', (req, res) => {
+app.post('/api/register', rateLimitMiddleware(5, 15 * 60 * 1000), (req, res) => {
   const { name, email, password } = req.body;
   if (!name || !email || !password) {
     return res.status(400).json({ error: 'Name, email, and password required' });
@@ -60,32 +79,71 @@ app.post('/api/register', (req, res) => {
   if (password.length < 6) {
     return res.status(400).json({ error: 'Password must be at least 6 characters' });
   }
-  if (users.has(email.toLowerCase())) {
+  const lowerEmail = email.toLowerCase();
+  if (users.has(lowerEmail)) {
+    const existing = users.get(lowerEmail);
+    if (existing.passwordHash === null) {
+      return res.status(409).json({ error: 'Email registered with Google. Please sign in with Google.' });
+    }
     return res.status(409).json({ error: 'Email already registered' });
   }
   const user = {
     id: crypto.randomUUID(),
     name,
-    email: email.toLowerCase(),
+    email: lowerEmail,
     passwordHash: hashPassword(password),
     createdAt: new Date().toISOString(),
   };
-  users.set(email.toLowerCase(), user);
+  users.set(lowerEmail, user);
   const token = generateToken(user.id);
   res.json({ token, user: { id: user.id, name: user.name, email: user.email } });
 });
 
-app.post('/api/login', (req, res) => {
+app.post('/api/login', rateLimitMiddleware(10, 15 * 60 * 1000), (req, res) => {
   const { email, password } = req.body;
   if (!email || !password) {
     return res.status(400).json({ error: 'Email and password required' });
   }
   const user = users.get(email.toLowerCase());
-  if (!user || !verifyPassword(password, user.passwordHash)) {
+  if (!user || user.passwordHash === null) {
+    return res.status(401).json({ error: 'Invalid email or password' });
+  }
+  if (!verifyPassword(password, user.passwordHash)) {
     return res.status(401).json({ error: 'Invalid email or password' });
   }
   const token = generateToken(user.id);
   res.json({ token, user: { id: user.id, name: user.name, email: user.email } });
+});
+
+app.post('/api/auth/google', async (req, res) => {
+  try {
+    const { idToken } = req.body;
+    if (!idToken) {
+      return res.status(400).json({ error: 'ID token required' });
+    }
+    const { data } = await axios.get(`https://oauth2.googleapis.com/tokeninfo?id_token=${encodeURIComponent(idToken)}`, { timeout: 10000 });
+    if (!data.sub || !data.email) {
+      return res.status(400).json({ error: 'Invalid ID token' });
+    }
+    const email = data.email.toLowerCase();
+    let user = users.get(email);
+    if (!user) {
+      user = {
+        id: crypto.randomUUID(),
+        googleId: data.sub,
+        name: data.name || data.email.split('@')[0],
+        email,
+        picture: data.picture || null,
+        passwordHash: null,
+        createdAt: new Date().toISOString(),
+      };
+      users.set(email, user);
+    }
+    const token = generateToken(user.id);
+    res.json({ token, user: { id: user.id, name: user.name, email: user.email, picture: user.picture } });
+  } catch (error) {
+    res.status(401).json({ error: 'Google authentication failed' });
+  }
 });
 
 app.get('/api/me', authMiddleware, (req, res) => {
@@ -94,7 +152,7 @@ app.get('/api/me', authMiddleware, (req, res) => {
   res.json({ id: user.id, name: user.name, email: user.email });
 });
 
-app.post('/api/logout', authMiddleware, (req, res) => {
+app.post('/api/logout', (req, res) => {
   const token = req.headers.authorization?.replace(/^Bearer\s+/i, '');
   sessions.delete(token);
   res.json({ status: 'ok' });
@@ -703,7 +761,7 @@ app.get('/api/careers/:course', (req, res) => {
 });
 
 // ─── PDF Generation Endpoint ───
-app.post('/api/generate-pdf', async (req, res) => {
+app.post('/api/generate-pdf', authMiddleware, async (req, res) => {
   try {
     const { title, content, type = 'document' } = req.body;
     if (typeof content !== 'string') {
@@ -781,7 +839,7 @@ app.post('/api/generate-pdf', async (req, res) => {
 });
 
 // ─── Word Document Generation Endpoint ───
-app.post('/api/generate-word', async (req, res) => {
+app.post('/api/generate-word', authMiddleware, async (req, res) => {
   try {
     const { title, content } = req.body;
     if (typeof content !== 'string') {
@@ -830,7 +888,7 @@ app.post('/api/generate-word', async (req, res) => {
 });
 
 // ─── GWA Report PDF ───
-app.post('/api/gwa-pdf', async (req, res) => {
+app.post('/api/gwa-pdf', authMiddleware, async (req, res) => {
   try {
     const { studentName, university, courses, gwa, honors, semester } = req.body;
     const pdfDoc = await PDFDocument.create();
@@ -968,7 +1026,7 @@ function getFallbackResponse(message) {
 }
 
 // AI Chat endpoint
-app.post('/api/ai-chat', async (req, res) => {
+app.post('/api/ai-chat', rateLimitMiddleware(20, 60 * 1000), authMiddleware, async (req, res) => {
   try {
     const { messages, context } = req.body;
     if (!messages || !Array.isArray(messages)) {
@@ -1031,7 +1089,7 @@ Guidelines:
 });
 
 // AI Essay Grader
-app.post('/api/ai-essay-grade', async (req, res) => {
+app.post('/api/ai-essay-grade', rateLimitMiddleware(10, 60 * 1000), authMiddleware, async (req, res) => {
   try {
     const { essay, rubric } = req.body;
     if (!essay || essay.trim().length < 50) {
@@ -1105,7 +1163,7 @@ Respond ONLY in valid JSON format:
 });
 
 // AI Study Planner
-app.post('/api/ai-study-plan', async (req, res) => {
+app.post('/api/ai-study-plan', rateLimitMiddleware(10, 60 * 1000), authMiddleware, async (req, res) => {
   try {
     const { subjects, examDate, hoursPerDay, preferences } = req.body;
     if (!subjects || !Array.isArray(subjects) || subjects.length === 0) {
@@ -1181,6 +1239,17 @@ Respond in JSON:
 app.use((err, req, res, next) => {
   console.error(err);
   res.status(500).json({ error: 'Internal server error' });
+});
+
+setInterval(() => {
+  const now = Date.now();
+  sessions.forEach((session, token) => {
+    if (session.expires < now) sessions.delete(token);
+  });
+}, 60 * 60 * 1000); // every hour
+
+app.use((req, res) => {
+  res.status(404).json({ error: 'Endpoint not found' });
 });
 
 app.listen(PORT, () => {

@@ -348,7 +348,7 @@ function TriviaView({ onBack }: { onBack: () => void }) {
         {showResults && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="glass-card p-5 text-center mt-3">
             <p className="text-lg font-bold">{correctCount} / {questions.length} Correct</p>
-            <p className="text-sm text-gray-500">
+            <p className="text-sm text-gray-500 dark:text-gray-400">
               {correctCount === questions.length ? 'Perfect score!' : correctCount >= questions.length / 2 ? 'Good job!' : 'Keep practicing!'}
             </p>
           </motion.div>
@@ -406,14 +406,14 @@ function DictionaryView({ onBack }: { onBack: () => void }) {
         {result && (
           <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="glass-card p-6">
             <h3 className="text-xl font-bold mb-1">{result.word}</h3>
-            {result.phonetic && <p className="text-sm text-gray-500 mb-3">{result.phonetic}</p>}
+            {result.phonetic && <p className="text-sm text-gray-500 dark:text-gray-400 mb-3">{result.phonetic}</p>}
             {result.meanings?.map((m: any, i: number) => (
               <div key={i} className="mb-4">
                 <p className="text-xs font-bold uppercase tracking-wider text-yellow-600 mb-1">{m.partOfSpeech}</p>
                 {m.definitions?.slice(0, 3).map((d: any, j: number) => (
                   <div key={j} className="mb-2">
                     <p className="text-sm">{j + 1}. {d.definition}</p>
-                    {d.example && <p className="text-xs text-gray-500 italic mt-0.5">"{d.example}"</p>}
+                    {d.example && <p className="text-xs text-gray-500 dark:text-gray-400 italic mt-0.5">"{d.example}"</p>}
                   </div>
                 ))}
               </div>

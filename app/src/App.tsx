@@ -27,6 +27,7 @@ const ResumeBuilder = lazy(() => import('./pages/ResumeBuilder'))
 const AiHumanizer = lazy(() => import('./pages/AiHumanizer'))
 const AiDetector = lazy(() => import('./pages/AiDetector'))
 const AutoCorrector = lazy(() => import('./pages/AutoCorrector'))
+const ToolsPage = lazy(() => import('./pages/ToolsPage'))
 const NotFound = lazy(() => import('./pages/NotFound'))
 
 /* Phase 2 pages — placeholders will be replaced */
@@ -78,6 +79,7 @@ function AnimatedRoutes() {
             <Route path="/humanizer" element={<AiHumanizer />} />
             <Route path="/ai-detector" element={<AiDetector />} />
             <Route path="/corrector" element={<AutoCorrector />} />
+            <Route path="/tools" element={<ToolsPage />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </Suspense>

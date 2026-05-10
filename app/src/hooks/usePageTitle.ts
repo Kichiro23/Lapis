@@ -23,6 +23,7 @@ const titles: Record<string, string> = {
   '/humanizer': 'AI Humanizer | Make Text Sound Natural — Lapis',
   '/ai-detector': 'AI Detector | Analyze Text Authenticity — Lapis',
   '/corrector': 'Auto Corrector | Fix Grammar & Clarity — Lapis',
+  '/tools': 'Tools Directory | All Student Tools in One Place — Lapis',
 }
 
 export function usePageTitle(pathname: string) {

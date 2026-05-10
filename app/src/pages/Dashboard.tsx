@@ -86,7 +86,7 @@ export default function Dashboard() {
             { icon: BookOpen, label: 'Universities', value: `${uniCount}+ Listed`, color: 'text-sky-500' },
             { icon: Bell, label: 'Deadlines', value: `${deadlines.filter(d => d.urgent).length} Urgent`, color: 'text-rose-500' },
           ].map((stat) => (
-            <div key={stat.label} className="glass-card p-4">
+            <div key={stat.label} className="glass-card p-4 min-w-0">
               <div className={`w-8 h-8 rounded-xl flex items-center justify-center mb-2 bg-slate-100 dark:bg-slate-800`}>
                 <stat.icon size={15} className={stat.color} />
               </div>
