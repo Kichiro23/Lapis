@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { BookOpen, ExternalLink, Search, Code, Beaker, Calculator, Globe, Video, FileText, Palette, Database, BrainCircuit, Library, Newspaper, Trophy } from 'lucide-react'
+import BackButton from '../components/BackButton'
 
 const categories = ['All', 'Textbooks', 'Coding', 'Law', 'Science', 'Math', 'Languages', 'Videos', 'Arts', 'Data', 'Research']
 
@@ -50,6 +51,7 @@ export default function ResourceHub() {
   return (
     <div className="min-h-[100dvh] pt-28 pb-20 px-4 md:px-6 bg-slate-50 dark:bg-slate-950">
       <div className="max-w-[1100px] mx-auto">
+        <BackButton className="mb-4" />
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
           <div className="flex items-center gap-2 mb-2">
             <BookOpen size={20} style={{ color: '#f5a623' }} />

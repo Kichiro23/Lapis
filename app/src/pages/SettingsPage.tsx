@@ -15,6 +15,7 @@ import {
   Trash2,
 } from 'lucide-react'
 import { useTheme } from 'next-themes'
+import BackButton from '../components/BackButton'
 
 const settingsSections = [
   {
@@ -59,6 +60,7 @@ export default function SettingsPage() {
   return (
     <div className="min-h-[100dvh] pt-24 pb-16 px-4 md:px-6 bg-slate-50 dark:bg-slate-950">
       <div className="max-w-[700px] mx-auto">
+        <BackButton className="mb-4" />
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-6">
           <div className="flex items-center gap-2 mb-2">
             <Settings size={20} style={{ color: '#f5a623' }} />

@@ -3,6 +3,7 @@ import { motion } from 'framer-motion'
 import { FileText, FileSpreadsheet, Download, Loader2, ArrowLeft, Type, BookOpen } from 'lucide-react'
 import { api, downloadBlob } from '../lib/api'
 import { decodeHtml } from '../lib/utils'
+import BackButton from '../components/BackButton'
 
 interface ConverterCardProps {
   icon: React.ElementType
@@ -392,6 +393,7 @@ export default function ConverterTools() {
   return (
     <div className="min-h-[100dvh] pt-24 pb-16 px-4 md:px-6 bg-slate-50 dark:bg-slate-950">
       <div className="max-w-[1100px] mx-auto">
+        <BackButton className="mb-4" />
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
           <div className="flex items-center gap-2 mb-2">
             <FileText size={20} style={{ color: '#f5a623' }} />

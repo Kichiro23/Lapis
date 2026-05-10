@@ -6,7 +6,7 @@ import { useTheme } from 'next-themes'
 import { useAuth } from '../hooks/useAuth'
 import AuthModal from './AuthModal'
 
-const navLinks = [
+const desktopNavLinks = [
   { label: 'GWA', href: '/gwa-calculator' },
   { label: 'Scholarships', href: '/scholarships' },
   { label: 'Universities', href: '/universities' },
@@ -14,6 +14,11 @@ const navLinks = [
   { label: 'Focus', href: '/focus' },
   { label: 'Career', href: '/career' },
   { label: 'Resources', href: '/resources' },
+]
+
+const mobileNavLinks = [
+  { label: 'Home', href: '/' },
+  ...desktopNavLinks,
 ]
 
 export default function Navbar() {
@@ -65,7 +70,7 @@ export default function Navbar() {
 
           {/* Desktop Nav */}
           <div className="hidden lg:flex items-center gap-0.5">
-            {navLinks.map((link) => {
+            {desktopNavLinks.map((link) => {
               const isActive = location.pathname === link.href
               return (
                 <Link
@@ -153,14 +158,10 @@ export default function Navbar() {
                 animate={{ x: 0 }}
                 exit={{ x: '100%' }}
                 transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-                className="absolute right-0 top-0 h-full w-[280px] rounded-l-3xl p-6 pt-20 flex flex-col gap-1"
-                style={{
-                  background: 'var(--bg-header)',
-                  backdropFilter: 'blur(24px)',
-                }}
+                className="absolute right-0 top-0 h-full w-[280px] rounded-l-3xl p-6 pt-20 flex flex-col gap-1 bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl"
                 onClick={(e) => e.stopPropagation()}
               >
-                {navLinks.map((link) => (
+                {mobileNavLinks.map((link) => (
                   <Link
                     key={link.href}
                     to={link.href}

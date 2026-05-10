@@ -14,6 +14,7 @@ import {
   Zap,
 } from 'lucide-react'
 import { useAuth } from '../hooks/useAuth'
+import BackButton from '../components/BackButton'
 
 const quickActions = [
   { icon: Calculator, label: 'Calculate GWA', href: '/gwa-calculator', desc: 'Track grades' },
@@ -55,6 +56,7 @@ export default function Dashboard() {
   return (
     <div className="min-h-[100dvh] pt-24 pb-20 px-4 md:px-6 bg-slate-50 dark:bg-slate-950">
       <div className="max-w-[1100px] mx-auto">
+        <BackButton className="mb-4" />
         {/* Welcome */}
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
           <div className="flex items-center gap-2 mb-1">

@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion'
 import { Github, Mail, ExternalLink, Code2, Heart, Rocket, Users } from 'lucide-react'
+import BackButton from '../components/BackButton'
 
 const stack = [
   { name: 'React 18', category: 'Frontend' },
@@ -33,6 +34,7 @@ export default function AboutPage() {
   return (
     <div className="min-h-[100dvh] pt-28 pb-20 px-4 md:px-6 bg-slate-50 dark:bg-slate-950">
       <div className="max-w-[800px] mx-auto">
+        <BackButton className="mb-4" />
         {/* Hero */}
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-12">
           <div

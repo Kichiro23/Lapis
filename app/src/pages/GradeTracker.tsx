@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { Plus, Trash2, TrendingUp, Award, Download, BookOpen } from 'lucide-react'
 import { api, downloadBlob } from '../lib/api'
+import BackButton from '../components/BackButton'
 
 interface Semester {
   id: string
@@ -118,6 +119,7 @@ export default function GradeTracker() {
   return (
     <div className="min-h-[100dvh] pt-28 pb-20 px-4 md:px-6 bg-slate-50 dark:bg-slate-950">
       <div className="max-w-[1000px] mx-auto">
+        <BackButton className="mb-4" />
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
           <div className="flex items-center gap-2 mb-2">
             <TrendingUp size={20} style={{ color: '#f5a623' }} />

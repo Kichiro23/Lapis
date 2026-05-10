@@ -13,6 +13,7 @@ import {
   Globe,
 } from 'lucide-react'
 import { Link } from 'react-router-dom'
+import BackButton from '../components/BackButton'
 
 const INTERNSHIPS = [
   { id: '1', title: 'Software Engineering Intern', company: 'Google', location: 'Remote / Global', type: 'Paid', remote: true, field: 'Tech' },
@@ -98,6 +99,7 @@ export default function CareerHub() {
   return (
     <div className="min-h-[100dvh] pt-24 pb-16 px-4 md:px-6 bg-slate-50 dark:bg-slate-950">
       <div className="max-w-[1100px] mx-auto">
+        <BackButton className="mb-4" />
         {/* Hero + Resume CTA */}
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
           <div className="flex items-center gap-2 mb-2">

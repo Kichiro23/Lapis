@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { FileText, Plus, Trash2, Download, User, GraduationCap, Briefcase, Wrench, Folder } from 'lucide-react'
 import { api, downloadBlob } from '../lib/api'
+import BackButton from '../components/BackButton'
 
 interface ResumeData {
   fullName: string
@@ -94,6 +95,7 @@ export default function ResumeBuilder() {
   return (
     <div className="min-h-[100dvh] pt-28 pb-20 px-4 md:px-6 bg-slate-50 dark:bg-slate-950">
       <div className="max-w-[1000px] mx-auto">
+        <BackButton className="mb-4" />
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
           <div className="flex items-center gap-2 mb-2">
             <FileText size={20} className="text-yellow-600 dark:text-yellow-400" />

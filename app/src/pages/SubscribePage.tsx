@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion'
 import { Check, Sparkles, Zap, Crown } from 'lucide-react'
 import { Link } from 'react-router-dom'
+import BackButton from '../components/BackButton'
 
 const plans = [
   {
@@ -65,6 +66,7 @@ export default function SubscribePage() {
   return (
     <div className="min-h-[100dvh] pt-28 pb-20 px-4 md:px-6 bg-slate-50 dark:bg-slate-950">
       <div className="max-w-[1100px] mx-auto">
+        <BackButton className="mb-4" />
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-12">
           <p className="text-xs font-bold uppercase tracking-[0.2em] mb-3" style={{ color: '#f5a623' }}>
             PRICING

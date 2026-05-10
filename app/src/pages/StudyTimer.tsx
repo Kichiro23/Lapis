@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { motion } from 'framer-motion'
 import { Play, Pause, RotateCcw, SkipForward, Clock, Flame, Target } from 'lucide-react'
-import SafeDust from '../components/SafeDust'
+import BackButton from '../components/BackButton'
 
 const MODES = [
   { id: 'pomodoro', label: 'Pomodoro', minutes: 25 },
@@ -78,10 +78,11 @@ export default function StudyTimer() {
   const strokeDashoffset = circumference - (progress / 100) * circumference
 
   return (
-    <div className="min-h-[100dvh] relative" style={{ background: '#212529' }}>
-      <SafeDust />
-
-      <div className="relative z-10 pt-24 pb-16 px-4 md:px-6 flex flex-col items-center justify-center min-h-[100dvh]">
+    <div className="min-h-[100dvh] bg-slate-900 text-white">
+      <div className="pt-24 pb-16 px-4 md:px-6 flex flex-col items-center justify-center min-h-[100dvh]">
+        <div className="w-full max-w-[480px]">
+          <BackButton className="mb-4 text-gray-400 hover:text-white" />
+        </div>
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}

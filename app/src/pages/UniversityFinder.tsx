@@ -6,6 +6,7 @@ import {
   MapPin,
   Check,
 } from 'lucide-react'
+import BackButton from '../components/BackButton'
 
 interface University {
   id: string
@@ -63,6 +64,7 @@ export default function UniversityFinder() {
   return (
     <div className="min-h-[100dvh] pt-24 pb-16 px-4 md:px-6 bg-slate-50 dark:bg-slate-950">
       <div className="max-w-[1100px] mx-auto">
+        <BackButton className="mb-4" />
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
           <div className="flex items-center gap-2 mb-2">
             <GraduationCap size={20} style={{ color: '#f5a623' }} />

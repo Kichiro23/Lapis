@@ -15,6 +15,7 @@ import {
 import RubikShuffleCounter from '../components/RubikShuffleCounter'
 import { PieChart, Pie, Cell, ResponsiveContainer } from 'recharts'
 import { api, downloadBlob } from '../lib/api'
+import BackButton from '../components/BackButton'
 
 interface Course {
   id: string
@@ -138,6 +139,7 @@ export default function GWACalculator() {
   return (
     <div className="min-h-[100dvh] pt-24 pb-16 px-4 md:px-6 bg-slate-50 dark:bg-slate-950">
       <div className="max-w-[1100px] mx-auto">
+        <BackButton className="mb-4" />
         {/* Header */}
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
           <div className="flex items-center gap-2 mb-2">

@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { FileEdit, RotateCcw, Check, Copy, CheckCircle } from 'lucide-react'
 import { api } from '../lib/api'
+import BackButton from '../components/BackButton'
 
 export default function AutoCorrector() {
   const [input, setInput] = useState('')
@@ -46,6 +47,7 @@ export default function AutoCorrector() {
   return (
     <div className="min-h-[100dvh] pt-28 pb-20 px-4 md:px-6 bg-slate-50 dark:bg-slate-950">
       <div className="max-w-[900px] mx-auto">
+        <BackButton className="mb-4" />
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
           <div className="flex items-center gap-2 mb-2">
             <FileEdit size={20} className="text-yellow-600 dark:text-yellow-400" />
