@@ -28,7 +28,7 @@ export default function Footer() {
   return (
     <footer className="relative z-10 border-t border-slate-200/50 dark:border-slate-800/50">
       <div className="section-container py-12 sm:py-16">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-12">
           {/* Brand */}
           <div className="sm:col-span-2 lg:col-span-1">
             <Link to="/" className="flex items-center gap-2 mb-3">
@@ -118,24 +118,7 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Developer */}
-          <div>
-            <h4 className="text-xs font-semibold uppercase tracking-widest mb-4" style={{ color: 'var(--text-secondary)' }}>
-              Developer
-            </h4>
-            <p className="text-sm mb-2" style={{ color: 'var(--text-secondary)' }}>
-              Rommel Andrei De Leon
-            </p>
-            <p className="text-xs mb-3" style={{ color: 'var(--text-secondary)' }}>
-              rommeld216@gmail.com
-            </p>
-            <Link
-              to="/about"
-              className="text-sm font-medium text-yellow-600 dark:text-yellow-400 hover:underline"
-            >
-              About the Developer →
-            </Link>
-          </div>
+
         </div>
 
         {/* Bottom Bar */}
@@ -144,7 +127,7 @@ export default function Footer() {
             &copy; {new Date().getFullYear()} Lapis. Open source. Free forever.
           </p>
           <p className="text-xs" style={{ color: 'var(--text-secondary)' }}>
-            Built by <a href="https://github.com/Kichiro23" target="_blank" rel="noopener noreferrer" className="hover:text-yellow-600 dark:hover:text-yellow-400 transition-colors">Rommel Andrei De Leon</a>
+            <a href="https://github.com/Kichiro23" target="_blank" rel="noopener noreferrer" className="hover:text-yellow-600 dark:hover:text-yellow-400 transition-colors">GitHub</a>
           </p>
         </div>
       </div>
