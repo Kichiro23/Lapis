@@ -81,11 +81,11 @@ export default function UniversityFinder() {
             </div>
             <div className="flex flex-wrap gap-2">
               {REGIONS.map((r) => (
-                <button key={r} onClick={() => setRegion(r)} className={`text-xs font-medium px-4 py-2 rounded-full transition-all ${region === r ? 'bg-[#f6e336] text-[#333]' : 'bg-[#f5f2eb] text-gray-500 hover:bg-gray-200'}`}>{r}</button>
+                <button key={r} onClick={() => setRegion(r)} className={`text-xs font-medium px-4 py-2 rounded-full transition-all ${region === r ? 'bg-yellow-400 text-slate-900' : 'bg-[#f5f2eb] dark:bg-slate-800 text-gray-500 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-slate-700'}`}>{r}</button>
               ))}
               <div className="w-[1px] h-6 bg-gray-200 mx-1 self-center" />
               {TYPES.map((t) => (
-                <button key={t} onClick={() => setType(t)} className={`text-xs font-medium px-4 py-2 rounded-full transition-all ${type === t ? 'bg-[#7cf0bd] text-[#333]' : 'bg-[#f5f2eb] text-gray-500 hover:bg-gray-200'}`}>{t}</button>
+                <button key={t} onClick={() => setType(t)} className={`text-xs font-medium px-4 py-2 rounded-full transition-all ${type === t ? 'bg-emerald-400 text-slate-900' : 'bg-[#f5f2eb] dark:bg-slate-800 text-gray-500 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-slate-700'}`}>{t}</button>
               ))}
             </div>
           </div>
@@ -107,7 +107,7 @@ export default function UniversityFinder() {
         {loading && (
           <div className="text-center py-16">
             <div className="w-10 h-10 border-2 border-yellow-400 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
-            <p className="text-sm text-gray-400">Loading universities...</p>
+            <p className="text-sm text-gray-400 dark:text-gray-500">Loading universities...</p>
           </div>
         )}
 
@@ -118,8 +118,8 @@ export default function UniversityFinder() {
               <div className="flex items-start justify-between mb-3">
                 <div className="flex-1">
                   <div className="flex items-center gap-2 mb-1">
-                    <span className={`text-[10px] font-semibold px-2.5 py-0.5 rounded-full ${u.type === 'Public' ? 'bg-blue-50 text-blue-700' : 'bg-purple-50 text-purple-700'}`}>{u.type}</span>
-                    <span className="text-[10px] font-semibold px-2.5 py-0.5 rounded-full bg-gray-100">{u.accreditation}</span>
+                    <span className={`text-[10px] font-semibold px-2.5 py-0.5 rounded-full ${u.type === 'Public' ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300' : 'bg-purple-50 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300'}`}>{u.type}</span>
+                    <span className="text-[10px] font-semibold px-2.5 py-0.5 rounded-full bg-gray-100 dark:bg-slate-700 dark:text-gray-300">{u.accreditation}</span>
                   </div>
                   <h3 className="text-base font-bold group-hover:text-yellow-700 transition-colors">{u.name}</h3>
                   <p className="text-xs flex items-center gap-1 mt-0.5" style={{ color: 'var(--text-secondary)' }}>
@@ -128,32 +128,32 @@ export default function UniversityFinder() {
                 </div>
                 <button
                   onClick={() => toggleCompare(u.id)}
-                  className={`w-8 h-8 rounded-full flex items-center justify-center transition-all ${compareList.includes(u.id) ? 'bg-[#f6e336]' : 'bg-gray-100 hover:bg-gray-200'}`}
+                  className={`w-8 h-8 rounded-full flex items-center justify-center transition-all ${compareList.includes(u.id) ? 'bg-yellow-400' : 'bg-gray-100 dark:bg-slate-700 hover:bg-gray-200 dark:hover:bg-slate-600'}`}
                 >
-                  <Check size={14} className={compareList.includes(u.id) ? 'text-[#333]' : 'text-gray-400'} />
+                  <Check size={14} className={compareList.includes(u.id) ? 'text-slate-900' : 'text-gray-400 dark:text-gray-500'} />
                 </button>
               </div>
 
               <div className="grid grid-cols-3 gap-3 mb-3">
-                <div className="text-center p-2 rounded-2xl" style={{ background: '#f5f2eb' }}>
-                  <p className="text-xs font-semibold">{u.tuition}</p>
-                  <p className="text-[9px]" style={{ color: 'var(--text-secondary)' }}>Tuition</p>
+                <div className="text-center p-2 rounded-2xl bg-[#f5f2eb] dark:bg-slate-800">
+                  <p className="text-xs font-semibold dark:text-white">{u.tuition}</p>
+                  <p className="text-[9px] dark:text-gray-400" style={{ color: 'var(--text-secondary)' }}>Tuition</p>
                 </div>
-                <div className="text-center p-2 rounded-2xl" style={{ background: '#f5f2eb' }}>
-                  <p className="text-xs font-semibold">{u.passingRate}%</p>
-                  <p className="text-[9px]" style={{ color: 'var(--text-secondary)' }}>Passing Rate</p>
+                <div className="text-center p-2 rounded-2xl bg-[#f5f2eb] dark:bg-slate-800">
+                  <p className="text-xs font-semibold dark:text-white">{u.passingRate}%</p>
+                  <p className="text-[9px] dark:text-gray-400" style={{ color: 'var(--text-secondary)' }}>Passing Rate</p>
                 </div>
-                <div className="text-center p-2 rounded-2xl" style={{ background: '#f5f2eb' }}>
-                  <p className="text-xs font-semibold">{u.population}</p>
-                  <p className="text-[9px]" style={{ color: 'var(--text-secondary)' }}>Students</p>
+                <div className="text-center p-2 rounded-2xl bg-[#f5f2eb] dark:bg-slate-800">
+                  <p className="text-xs font-semibold dark:text-white">{u.population}</p>
+                  <p className="text-[9px] dark:text-gray-400" style={{ color: 'var(--text-secondary)' }}>Students</p>
                 </div>
               </div>
 
               <div className="flex flex-wrap gap-1">
                 {u.courses.slice(0, 3).map((c) => (
-                  <span key={c} className="text-[9px] font-medium px-2 py-0.5 rounded-full bg-gray-100">{c}</span>
+                  <span key={c} className="text-[9px] font-medium px-2 py-0.5 rounded-full bg-gray-100 dark:bg-slate-700 dark:text-gray-300">{c}</span>
                 ))}
-                {u.courses.length > 3 && <span className="text-[9px] font-medium px-2 py-0.5 rounded-full bg-gray-100">+{u.courses.length - 3} more</span>}
+                {u.courses.length > 3 && <span className="text-[9px] font-medium px-2 py-0.5 rounded-full bg-gray-100 dark:bg-slate-700 dark:text-gray-300">+{u.courses.length - 3} more</span>}
               </div>
             </motion.div>
           ))}
@@ -165,15 +165,15 @@ export default function UniversityFinder() {
             <h3 className="text-base font-bold mb-4">Comparison</h3>
             <table className="w-full text-xs">
               <thead>
-                <tr className="border-b" style={{ borderColor: 'rgba(0,0,0,0.06)' }}>
+                <tr className="border-b border-slate-200 dark:border-slate-700">
                   <th className="text-left py-2 pr-4 font-semibold">Feature</th>
                   {comparedUnis.map((u) => <th key={u.id} className="text-left py-2 px-3 font-semibold min-w-[150px]">{u.name.substring(0, 25)}</th>)}
                 </tr>
               </thead>
               <tbody>
                 {['type', 'tuition', 'passingRate', 'population', 'accreditation', 'location'].map((field) => (
-                  <tr key={field} className="border-b" style={{ borderColor: 'rgba(0,0,0,0.04)' }}>
-                    <td className="py-2 pr-4 font-medium capitalize" style={{ color: 'var(--text-secondary)' }}>{field === 'passingRate' ? 'Passing Rate' : field}</td>
+                  <tr key={field} className="border-b border-slate-100 dark:border-slate-800">
+                    <td className="py-2 pr-4 font-medium capitalize dark:text-gray-400" style={{ color: 'var(--text-secondary)' }}>{field === 'passingRate' ? 'Passing Rate' : field}</td>
                     {comparedUnis.map((u) => (
                       <td key={u.id} className="py-2 px-3">
                         {field === 'passingRate' ? `${(u as any)[field]}%` : (u as any)[field]}

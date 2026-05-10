@@ -14,6 +14,7 @@ import {
   Download,
   Trash2,
 } from 'lucide-react'
+import { useTheme } from 'next-themes'
 
 const settingsSections = [
   {
@@ -50,7 +51,7 @@ const settingsSections = [
 
 export default function SettingsPage() {
   const [activeSection, setActiveSection] = useState<string | null>(null)
-  const [theme, setTheme] = useState<'light' | 'dark'>('light')
+  const { theme, setTheme } = useTheme()
   const [language, setLanguage] = useState<'en' | 'fil'>('en')
   const [notifs, setNotifs] = useState(true)
   const [anonymous, setAnonymous] = useState(true)
@@ -64,7 +65,7 @@ export default function SettingsPage() {
             <span className="text-xs font-bold uppercase tracking-[0.2em]" style={{ color: '#f5a623' }}>SETTINGS</span>
           </div>
           <h1 className="text-3xl font-bold tracking-tight">Settings</h1>
-          <p className="text-sm mt-1" style={{ color: 'var(--text-secondary)' }}>Customize your Lapis experience</p>
+          <p className="text-sm mt-1 dark:text-gray-400" style={{ color: 'var(--text-secondary)' }}>Customize your Lapis experience</p>
         </motion.div>
 
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}>
@@ -75,13 +76,13 @@ export default function SettingsPage() {
                 className="w-full glass-card p-4 flex items-center gap-3 text-left hover:translate-y-0 hover:shadow-md transition-all"
               >
                 <div className="w-10 h-10 rounded-2xl flex items-center justify-center flex-shrink-0" style={{ background: '#f6e33630' }}>
-                  <section.icon size={18} />
+                  <section.icon size={18} className="dark:text-yellow-300" />
                 </div>
                 <div className="flex-1 min-w-0">
                   <h3 className="text-sm font-bold">{section.title}</h3>
-                  <p className="text-xs" style={{ color: 'var(--text-secondary)' }}>{section.description}</p>
+                  <p className="text-xs dark:text-gray-400" style={{ color: 'var(--text-secondary)' }}>{section.description}</p>
                 </div>
-                <ChevronRight size={16} className={`transition-transform flex-shrink-0 ${activeSection === section.id ? 'rotate-90' : ''}`} style={{ color: 'var(--text-secondary)' }} />
+                <ChevronRight size={16} className={`transition-transform flex-shrink-0 dark:text-gray-500`} style={{ color: 'var(--text-secondary)' }} />
               </button>
 
               {/* Expanded Content */}
@@ -94,21 +95,21 @@ export default function SettingsPage() {
                   {section.id === 'profile' && (
                     <div className="flex flex-col gap-3">
                       <div>
-                        <label className="text-xs font-semibold uppercase tracking-wider mb-1 block" style={{ color: 'var(--text-secondary)' }}>Display Name (Optional)</label>
-                        <input type="text" placeholder="Juan Dela Cruz" className="input-pill" />
+                        <label className="text-xs font-semibold uppercase tracking-wider mb-1 block dark:text-gray-400" style={{ color: 'var(--text-secondary)' }}>Display Name (Optional)</label>
+                        <input type="text" placeholder="Your name" className="input-pill w-full" />
                       </div>
                       <div>
-                        <label className="text-xs font-semibold uppercase tracking-wider mb-1 block" style={{ color: 'var(--text-secondary)' }}>School</label>
-                        <input type="text" placeholder="University of the Philippines" className="input-pill" />
+                        <label className="text-xs font-semibold uppercase tracking-wider mb-1 block dark:text-gray-400" style={{ color: 'var(--text-secondary)' }}>School</label>
+                        <input type="text" placeholder="Your university" className="input-pill w-full" />
                       </div>
                       <div className="grid grid-cols-2 gap-3">
                         <div>
-                          <label className="text-xs font-semibold uppercase tracking-wider mb-1 block" style={{ color: 'var(--text-secondary)' }}>Course</label>
-                          <input type="text" placeholder="BS Computer Science" className="input-pill" />
+                          <label className="text-xs font-semibold uppercase tracking-wider mb-1 block dark:text-gray-400" style={{ color: 'var(--text-secondary)' }}>Course</label>
+                          <input type="text" placeholder="BS Computer Science" className="input-pill w-full" />
                         </div>
                         <div>
-                          <label className="text-xs font-semibold uppercase tracking-wider mb-1 block" style={{ color: 'var(--text-secondary)' }}>Year Level</label>
-                          <select className="input-pill appearance-none cursor-pointer">
+                          <label className="text-xs font-semibold uppercase tracking-wider mb-1 block dark:text-gray-400" style={{ color: 'var(--text-secondary)' }}>Year Level</label>
+                          <select className="input-pill appearance-none cursor-pointer w-full">
                             <option>1st Year</option>
                             <option>2nd Year</option>
                             <option>3rd Year</option>
@@ -128,9 +129,9 @@ export default function SettingsPage() {
                           <Moon size={14} />
                           <span className="text-sm">Theme</span>
                         </div>
-                        <div className="flex gap-1 p-0.5 rounded-full bg-gray-100">
-                          <button onClick={() => setTheme('light')} className={`text-[10px] font-medium px-3 py-1.5 rounded-full transition-all ${theme === 'light' ? 'bg-white shadow-sm' : 'text-gray-500'}`}>Light</button>
-                          <button onClick={() => setTheme('dark')} className={`text-[10px] font-medium px-3 py-1.5 rounded-full transition-all ${theme === 'dark' ? 'bg-white shadow-sm' : 'text-gray-500'}`}>Dark</button>
+                        <div className="flex gap-1 p-0.5 rounded-full bg-gray-100 dark:bg-slate-800">
+                          <button onClick={() => setTheme('light')} className={`text-[10px] font-medium px-3 py-1.5 rounded-full transition-all ${theme === 'light' ? 'bg-white dark:bg-slate-600 shadow-sm' : 'text-gray-500 dark:text-gray-400'}`}>Light</button>
+                          <button onClick={() => setTheme('dark')} className={`text-[10px] font-medium px-3 py-1.5 rounded-full transition-all ${theme === 'dark' ? 'bg-white dark:bg-slate-600 shadow-sm' : 'text-gray-500 dark:text-gray-400'}`}>Dark</button>
                         </div>
                       </div>
                       <div className="flex items-center justify-between">
@@ -138,9 +139,9 @@ export default function SettingsPage() {
                           <Globe size={14} />
                           <span className="text-sm">Language</span>
                         </div>
-                        <div className="flex gap-1 p-0.5 rounded-full bg-gray-100">
-                          <button onClick={() => setLanguage('en')} className={`text-[10px] font-medium px-3 py-1.5 rounded-full transition-all ${language === 'en' ? 'bg-white shadow-sm' : 'text-gray-500'}`}>English</button>
-                          <button onClick={() => setLanguage('fil')} className={`text-[10px] font-medium px-3 py-1.5 rounded-full transition-all ${language === 'fil' ? 'bg-white shadow-sm' : 'text-gray-500'}`}>Filipino</button>
+                        <div className="flex gap-1 p-0.5 rounded-full bg-gray-100 dark:bg-slate-800">
+                          <button onClick={() => setLanguage('en')} className={`text-[10px] font-medium px-3 py-1.5 rounded-full transition-all ${language === 'en' ? 'bg-white dark:bg-slate-600 shadow-sm' : 'text-gray-500 dark:text-gray-400'}`}>English</button>
+                          <button onClick={() => setLanguage('fil')} className={`text-[10px] font-medium px-3 py-1.5 rounded-full transition-all ${language === 'fil' ? 'bg-white dark:bg-slate-600 shadow-sm' : 'text-gray-500 dark:text-gray-400'}`}>Filipino</button>
                         </div>
                       </div>
                       <div className="flex items-center justify-between">
@@ -150,7 +151,7 @@ export default function SettingsPage() {
                         </div>
                         <button
                           onClick={() => setNotifs(!notifs)}
-                          className={`w-11 h-6 rounded-full transition-all relative ${notifs ? 'bg-[#f6e336]' : 'bg-gray-300'}`}
+                          className={`w-11 h-6 rounded-full transition-all relative ${notifs ? 'bg-yellow-400' : 'bg-gray-300 dark:bg-slate-700'}`}
                         >
                           <span className={`absolute top-0.5 w-5 h-5 rounded-full bg-white shadow-sm transition-all ${notifs ? 'left-[22px]' : 'left-0.5'}`} />
                         </button>
@@ -161,8 +162,8 @@ export default function SettingsPage() {
                   {section.id === 'academic' && (
                     <div className="flex flex-col gap-3">
                       <div>
-                        <label className="text-xs font-semibold uppercase tracking-wider mb-1 block" style={{ color: 'var(--text-secondary)' }}>Default University</label>
-                        <select className="input-pill appearance-none cursor-pointer">
+                        <label className="text-xs font-semibold uppercase tracking-wider mb-1 block dark:text-gray-400" style={{ color: 'var(--text-secondary)' }}>Default University</label>
+                        <select className="input-pill appearance-none cursor-pointer w-full">
                           <option>University of the Philippines</option>
                           <option>Ateneo de Manila University</option>
                           <option>De La Salle University</option>
@@ -171,8 +172,8 @@ export default function SettingsPage() {
                         </select>
                       </div>
                       <div>
-                        <label className="text-xs font-semibold uppercase tracking-wider mb-1 block" style={{ color: 'var(--text-secondary)' }}>Grading System</label>
-                        <select className="input-pill appearance-none cursor-pointer">
+                        <label className="text-xs font-semibold uppercase tracking-wider mb-1 block dark:text-gray-400" style={{ color: 'var(--text-secondary)' }}>Grading System</label>
+                        <select className="input-pill appearance-none cursor-pointer w-full">
                           <option>1.00 - 5.00 (UP System)</option>
                           <option>4.00 Scale</option>
                           <option>Percentage (0-100%)</option>
@@ -186,21 +187,21 @@ export default function SettingsPage() {
                       <div className="flex items-center justify-between">
                         <div>
                           <p className="text-sm font-semibold">Anonymous Mode</p>
-                          <p className="text-[11px]" style={{ color: 'var(--text-secondary)' }}>Hide all personal data in UI</p>
+                          <p className="text-[11px] dark:text-gray-400" style={{ color: 'var(--text-secondary)' }}>Hide all personal data in UI</p>
                         </div>
                         <button
                           onClick={() => setAnonymous(!anonymous)}
-                          className={`w-11 h-6 rounded-full transition-all relative ${anonymous ? 'bg-[#f6e336]' : 'bg-gray-300'}`}
+                          className={`w-11 h-6 rounded-full transition-all relative ${anonymous ? 'bg-yellow-400' : 'bg-gray-300 dark:bg-slate-700'}`}
                         >
                           <span className={`absolute top-0.5 w-5 h-5 rounded-full bg-white shadow-sm transition-all ${anonymous ? 'left-[22px]' : 'left-0.5'}`} />
                         </button>
                       </div>
-                      <div className="border-t pt-3" style={{ borderColor: 'rgba(0,0,0,0.06)' }}>
-                        <button className="flex items-center gap-2 text-sm hover:text-yellow-700 transition-colors">
+                      <div className="border-t border-slate-200 dark:border-slate-700 pt-3">
+                        <button className="flex items-center gap-2 text-sm hover:text-yellow-600 dark:hover:text-yellow-400 transition-colors">
                           <Download size={14} /> Export All Data (JSON/CSV)
                         </button>
                       </div>
-                      <div className="border-t pt-3" style={{ borderColor: 'rgba(0,0,0,0.06)' }}>
+                      <div className="border-t border-slate-200 dark:border-slate-700 pt-3">
                         <button className="flex items-center gap-2 text-sm text-red-500 hover:text-red-700 transition-colors">
                           <Trash2 size={14} /> Delete All Data
                         </button>
@@ -212,7 +213,7 @@ export default function SettingsPage() {
                     <div className="flex flex-col gap-3">
                       <div className="flex items-center justify-between">
                         <span className="text-sm">Version</span>
-                        <span className="text-xs font-mono px-2 py-1 rounded-full bg-gray-100">1.0.0</span>
+                        <span className="text-xs font-mono px-2 py-1 rounded-full bg-gray-100 dark:bg-slate-800 dark:text-gray-300">1.0.0</span>
                       </div>
                       <div className="flex items-center justify-between">
                         <span className="text-sm">Developer</span>
@@ -224,10 +225,10 @@ export default function SettingsPage() {
                       </div>
                       <div className="flex items-center justify-between">
                         <span className="text-sm">GitHub</span>
-                        <a href="#" className="text-xs hover:underline">github.com/Kichiro23</a>
+                        <a href="https://github.com/Kichiro23" target="_blank" rel="noopener noreferrer" className="text-xs hover:underline hover:text-yellow-600 dark:hover:text-yellow-400">github.com/Kichiro23</a>
                       </div>
-                      <div className="mt-2 p-3 rounded-2xl text-center text-xs" style={{ background: '#f6e33620' }}>
-                        <p className="font-semibold">Built with love in the Philippines</p>
+                      <div className="mt-2 p-3 rounded-2xl text-center text-xs bg-yellow-50 dark:bg-yellow-900/20">
+                        <p className="font-semibold dark:text-yellow-300">Built with passion</p>
                       </div>
                     </div>
                   )}

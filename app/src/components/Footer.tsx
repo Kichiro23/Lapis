@@ -8,6 +8,14 @@ const toolLinks = [
   { label: 'Study Tools', href: '/study' },
   { label: 'Focus Timer', href: '/focus' },
   { label: 'Career Hub', href: '/career' },
+  { label: 'Resume Builder', href: '/resume' },
+]
+
+const aiLinks = [
+  { label: 'AI Detector', href: '/ai-detector' },
+  { label: 'AI Humanizer', href: '/humanizer' },
+  { label: 'Auto-Corrector', href: '/corrector' },
+  { label: 'Essay Grader', href: '/essay-grader' },
 ]
 
 const infoLinks = [
@@ -57,6 +65,26 @@ export default function Footer() {
             </h4>
             <ul className="flex flex-col gap-2.5">
               {toolLinks.map((link) => (
+                <li key={link.href}>
+                  <Link
+                    to={link.href}
+                    className="text-sm hover:text-yellow-600 dark:hover:text-yellow-400 transition-colors"
+                    style={{ color: 'var(--text-secondary)' }}
+                  >
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* AI Tools */}
+          <div>
+            <h4 className="text-xs font-semibold uppercase tracking-widest mb-4" style={{ color: 'var(--text-secondary)' }}>
+              AI Tools
+            </h4>
+            <ul className="flex flex-col gap-2.5">
+              {aiLinks.map((link) => (
                 <li key={link.href}>
                   <Link
                     to={link.href}

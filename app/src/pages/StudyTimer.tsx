@@ -115,15 +115,15 @@ export default function StudyTimer() {
           </div>
 
           {/* Timer Card */}
-          <div className="rounded-[40px] p-8 mb-6" style={{ background: '#f5f2eb' }}>
+          <div className="rounded-[40px] p-8 mb-6 bg-slate-800 border border-slate-700">
             {activeMode === 'custom' && (
               <div className="text-center mb-4">
-                <label className="text-[10px] font-semibold uppercase tracking-wider text-gray-500 mr-2">Minutes</label>
+                <label className="text-[10px] font-semibold uppercase tracking-wider text-gray-400 mr-2">Minutes</label>
                 <input
                   type="number"
                   value={customMins}
                   onChange={(e) => setCustomMins(Math.max(1, Math.min(120, Number(e.target.value))))}
-                  className="input-pill w-20 text-center text-sm"
+                  className="w-20 text-center text-sm rounded-full px-3 py-2 bg-slate-700 border border-slate-600 text-white focus:outline-none focus:ring-2 focus:ring-yellow-400"
                 />
               </div>
             )}
@@ -150,10 +150,10 @@ export default function StudyTimer() {
                   />
                 </svg>
                 <div className="absolute inset-0 flex flex-col items-center justify-center">
-                  <span className="text-5xl font-extrabold font-mono" style={{ color: 'var(--text-primary)' }}>
+                  <span className="text-5xl font-extrabold font-mono text-white">
                     {formatTime(timeLeft)}
                   </span>
-                  <p className="text-xs mt-1" style={{ color: 'var(--text-secondary)' }}>
+                  <p className="text-xs mt-1 text-gray-400">
                     {activeMode === 'pomodoro' ? 'Focus session' : 'Take a break'}
                   </p>
                 </div>
@@ -187,8 +187,7 @@ export default function StudyTimer() {
               placeholder="What are you working on?"
               value={taskName}
               onChange={(e) => setTaskName(e.target.value)}
-              className="input-pill bg-white/5 text-white placeholder-gray-500 border-white/10 w-full"
-              style={{ color: 'white' }}
+              className="w-full rounded-full px-4 py-2.5 text-sm bg-slate-800 border border-slate-700 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-yellow-400"
             />
           </div>
 

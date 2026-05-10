@@ -178,14 +178,14 @@ function DictionaryTool() {
       {result && (
         <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="glass-card p-6">
           <h3 className="text-xl font-bold mb-1">{result.word}</h3>
-          {result.phonetic && <p className="text-sm text-gray-500 mb-3">{result.phonetic}</p>}
+          {result.phonetic && <p className="text-sm text-gray-500 dark:text-gray-400 mb-3">{result.phonetic}</p>}
           {result.meanings?.map((m: any, i: number) => (
             <div key={i} className="mb-4">
-              <p className="text-xs font-bold uppercase tracking-wider text-yellow-600 mb-1">{m.partOfSpeech}</p>
+              <p className="text-xs font-bold uppercase tracking-wider text-yellow-600 dark:text-yellow-400 mb-1">{m.partOfSpeech}</p>
               {m.definitions?.slice(0, 3).map((d: any, j: number) => (
                 <div key={j} className="mb-2">
-                  <p className="text-sm">{j + 1}. {d.definition}</p>
-                  {d.example && <p className="text-xs text-gray-500 italic mt-0.5">"{d.example}"</p>}
+                  <p className="text-sm dark:text-gray-200">{j + 1}. {d.definition}</p>
+                  {d.example && <p className="text-xs text-gray-500 dark:text-gray-400 italic mt-0.5">"{d.example}"</p>}
                 </div>
               ))}
             </div>
@@ -247,10 +247,10 @@ function TriviaTool() {
                     key={ans}
                     onClick={() => selectAnswer(i, ans)}
                     className={`text-xs font-medium px-3 py-2 rounded-xl text-left transition-all ${
-                      isCorrect ? 'bg-green-100 text-green-700 border border-green-300' :
-                      isWrong ? 'bg-red-100 text-red-700 border border-red-300' :
-                      isSelected ? 'bg-yellow-100 text-yellow-800 border border-yellow-300' :
-                      'bg-gray-50 hover:bg-gray-100 border border-transparent'
+                      isCorrect ? 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300 border border-green-300 dark:border-green-700' :
+                      isWrong ? 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300 border border-red-300 dark:border-red-700' :
+                      isSelected ? 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-800 dark:text-yellow-300 border border-yellow-300 dark:border-yellow-700' :
+                      'bg-gray-50 dark:bg-slate-800 hover:bg-gray-100 dark:hover:bg-slate-700 border border-transparent dark:border-slate-700 dark:text-gray-300'
                     }`}
                     dangerouslySetInnerHTML={{ __html: ans }}
                   />
@@ -270,7 +270,7 @@ function TriviaTool() {
       {showResults && (
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="glass-card p-5 text-center mt-3">
           <p className="text-lg font-bold">{correctCount} / {questions.length} Correct</p>
-          <p className="text-sm text-gray-500">
+          <p className="text-sm text-gray-500 dark:text-gray-400">
             {correctCount === questions.length ? 'Perfect score!' : correctCount >= questions.length / 2 ? 'Good job!' : 'Keep practicing!'}
           </p>
         </motion.div>
@@ -326,9 +326,9 @@ function CurrencyConverter() {
           {loading ? <Loader2 size={14} className="animate-spin" /> : 'Get Rate'}
         </button>
         {rates[to] && (
-          <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="text-center p-4 rounded-2xl bg-yellow-50">
-            <p className="text-2xl font-extrabold">{converted} {to}</p>
-            <p className="text-xs text-gray-500">1 {from} = {rates[to]} {to}</p>
+          <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="text-center p-4 rounded-2xl bg-yellow-50 dark:bg-yellow-900/20">
+            <p className="text-2xl font-extrabold dark:text-yellow-300">{converted} {to}</p>
+            <p className="text-xs text-gray-500 dark:text-gray-400">1 {from} = {rates[to]} {to}</p>
           </motion.div>
         )}
       </div>
@@ -382,7 +382,7 @@ export default function ConverterTools() {
             <span className="text-xs font-bold uppercase tracking-[0.2em]" style={{ color: '#f5a623' }}>TOOLS</span>
           </div>
           <h1 className="text-3xl md:text-5xl font-bold tracking-tight mb-2">Converters & Utilities</h1>
-          <p className="text-base" style={{ color: 'var(--text-secondary)' }}>PDF, Word, Dictionary, Trivia, and Currency tools</p>
+          <p className="text-base dark:text-gray-400" style={{ color: 'var(--text-secondary)' }}>PDF, Word, Dictionary, Trivia, and Currency tools</p>
         </motion.div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">

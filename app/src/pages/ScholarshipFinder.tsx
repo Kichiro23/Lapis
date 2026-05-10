@@ -25,6 +25,7 @@ interface Scholarship {
   requirements: string[]
   benefits: string[]
   process: string[]
+  link?: string
 }
 
 const FILTER_TYPES = ['All', 'Government', 'Private', 'University', 'International']
@@ -65,6 +66,16 @@ export default function ScholarshipFinder() {
     return matchSearch && matchType && matchCourse
   })
 
+  const badgeClass = (active: boolean) =>
+    active
+      ? 'bg-yellow-400 text-slate-900'
+      : 'bg-[#f5f2eb] dark:bg-slate-800 text-gray-500 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-slate-700'
+
+  const courseBadgeClass = (active: boolean) =>
+    active
+      ? 'bg-emerald-400 text-slate-900'
+      : 'bg-[#f5f2eb] dark:bg-slate-800 text-gray-500 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-slate-700'
+
   return (
     <div className="min-h-[100dvh] pt-24 pb-16 px-4 md:px-6 bg-slate-50 dark:bg-slate-950">
       <div className="max-w-[1100px] mx-auto">
@@ -77,8 +88,8 @@ export default function ScholarshipFinder() {
             </span>
           </div>
           <h1 className="text-3xl md:text-5xl font-bold tracking-tight mb-2">Find Your Scholarship</h1>
-          <p className="text-base" style={{ color: 'var(--text-secondary)' }}>
-            AI-matched opportunities based on your profile
+          <p className="text-base dark:text-gray-400" style={{ color: 'var(--text-secondary)' }}>
+            Curated opportunities from local and international sources
           </p>
         </motion.div>
 
@@ -86,13 +97,13 @@ export default function ScholarshipFinder() {
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="mb-6">
           <div className="glass-card p-4">
             <div className="relative mb-4">
-              <Search size={16} className="absolute left-4 top-1/2 -translate-y-1/2" style={{ color: 'var(--text-secondary)' }} />
+              <Search size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500" />
               <input
                 type="text"
                 placeholder="Search scholarships..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="input-pill pl-10"
+                className="w-full rounded-full pl-10 pr-4 py-2.5 text-sm bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 focus:outline-none focus:ring-2 focus:ring-yellow-400"
               />
             </div>
             <div className="flex flex-wrap gap-2">
@@ -100,25 +111,17 @@ export default function ScholarshipFinder() {
                 <button
                   key={type}
                   onClick={() => setSelectedType(type)}
-                  className={`text-xs font-medium px-4 py-2 rounded-full transition-all ${
-                    selectedType === type
-                      ? 'bg-[#f6e336] text-[#333]'
-                      : 'bg-[#f5f2eb] text-gray-500 hover:bg-gray-200'
-                  }`}
+                  className={`text-xs font-medium px-4 py-2 rounded-full transition-all ${badgeClass(selectedType === type)}`}
                 >
                   {type}
                 </button>
               ))}
-              <div className="w-[1px] h-6 bg-gray-200 mx-1 self-center" />
+              <div className="w-[1px] h-6 bg-gray-200 dark:bg-slate-700 mx-1 self-center" />
               {COURSE_FILTERS.map((c) => (
                 <button
                   key={c}
                   onClick={() => setSelectedCourse(c)}
-                  className={`text-xs font-medium px-4 py-2 rounded-full transition-all ${
-                    selectedCourse === c
-                      ? 'bg-[#7cf0bd] text-[#333]'
-                      : 'bg-[#f5f2eb] text-gray-500 hover:bg-gray-200'
-                  }`}
+                  className={`text-xs font-medium px-4 py-2 rounded-full transition-all ${courseBadgeClass(selectedCourse === c)}`}
                 >
                   {c}
                 </button>
@@ -142,53 +145,47 @@ export default function ScholarshipFinder() {
                 onClick={() => setSelectedScholar(s)}
               >
                 {/* Badges */}
-                <div className="flex items-center gap-2 mb-3">
-                  <span className="text-[10px] font-semibold px-2.5 py-1 rounded-full bg-[#f6e33630]" style={{ color: '#333' }}>
+                <div className="flex items-center gap-2 mb-3 flex-wrap">
+                  <span className="text-[10px] font-semibold px-2.5 py-1 rounded-full bg-yellow-100 dark:bg-yellow-900/30 text-yellow-800 dark:text-yellow-300">
                     {s.type}
                   </span>
-                  <span className="text-[10px] font-semibold px-2.5 py-1 rounded-full bg-red-50 text-red-600 flex items-center gap-1">
+                  <span className="text-[10px] font-semibold px-2.5 py-1 rounded-full bg-red-50 dark:bg-red-900/30 text-red-600 dark:text-red-300 flex items-center gap-1">
                     <Clock size={9} /> {s.deadline}
                   </span>
-                  <span className="text-[10px] font-semibold px-2.5 py-1 rounded-full bg-green-50 text-green-700 flex items-center gap-1">
+                  <span className="text-[10px] font-semibold px-2.5 py-1 rounded-full bg-green-50 dark:bg-green-900/30 text-green-700 dark:text-green-300">
                     {s.amount}
                   </span>
                 </div>
 
-                <h3 className="text-base font-bold mb-1.5 group-hover:text-yellow-700 transition-colors">{s.name}</h3>
-                <p className="text-xs leading-relaxed mb-3 line-clamp-2" style={{ color: 'var(--text-secondary)' }}>
+                <h3 className="text-base font-bold mb-1.5 group-hover:text-yellow-700 dark:group-hover:text-yellow-300 transition-colors">{s.name}</h3>
+                <p className="text-xs leading-relaxed mb-3 line-clamp-2 dark:text-gray-400" style={{ color: 'var(--text-secondary)' }}>
                   {s.description}
                 </p>
 
                 {/* Requirement pills */}
                 <div className="flex flex-wrap gap-1.5 mb-3">
-                  <span className="text-[10px] font-medium px-2 py-0.5 rounded-full bg-gray-100">
+                  <span className="text-[10px] font-medium px-2 py-0.5 rounded-full bg-gray-100 dark:bg-slate-700 dark:text-gray-300">
                     GWA ≤ {s.gwaReq}
                   </span>
-                  <span className="text-[10px] font-medium px-2 py-0.5 rounded-full bg-gray-100">
+                  <span className="text-[10px] font-medium px-2 py-0.5 rounded-full bg-gray-100 dark:bg-slate-700 dark:text-gray-300">
                     Income ≤ {s.incomeReq}
                   </span>
                   {s.courses.slice(0, 2).map((c) => (
-                    <span key={c} className="text-[10px] font-medium px-2 py-0.5 rounded-full bg-gray-100">
+                    <span key={c} className="text-[10px] font-medium px-2 py-0.5 rounded-full bg-gray-100 dark:bg-slate-700 dark:text-gray-300">
                       {c}
                     </span>
                   ))}
                 </div>
 
                 <div className="flex items-center justify-between">
-                  <span
-                    className="text-[10px] font-bold px-2.5 py-1 rounded-full"
-                    style={{
-                      background: s.matchScore >= 85 ? '#d2f75440' : s.matchScore >= 70 ? '#f6e33640' : '#f5f2eb',
-                      color: '#333',
-                    }}
-                  >
+                  <span className="text-[10px] font-bold px-2.5 py-1 rounded-full bg-yellow-50 dark:bg-yellow-900/20 text-yellow-700 dark:text-yellow-300">
                     {s.matchScore}% Match
                   </span>
                   <button
                     onClick={(e) => { e.stopPropagation(); toggleSaved(s.id) }}
-                    className="w-8 h-8 rounded-full flex items-center justify-center hover:bg-gray-100 transition-colors"
+                    className="w-8 h-8 rounded-full flex items-center justify-center hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors"
                   >
-                    <Heart size={14} className={savedIds.has(s.id) ? 'fill-red-500 text-red-500' : 'text-gray-400'} />
+                    <Heart size={14} className={savedIds.has(s.id) ? 'fill-red-500 text-red-500' : 'text-gray-400 dark:text-gray-500'} />
                   </button>
                 </div>
               </motion.div>
@@ -200,16 +197,16 @@ export default function ScholarshipFinder() {
         {loading && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center py-16">
             <div className="w-10 h-10 border-2 border-yellow-400 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
-            <p className="text-sm text-gray-400">Loading scholarships...</p>
+            <p className="text-sm text-gray-400 dark:text-gray-500">Loading scholarships...</p>
           </motion.div>
         )}
 
         {/* Empty State */}
         {!loading && filtered.length === 0 && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center py-16">
-            <Search size={48} className="mx-auto mb-4 text-gray-300" />
-            <p className="text-lg font-semibold text-gray-400">No scholarships match your filters</p>
-            <p className="text-sm text-gray-400 mt-1">Try adjusting your search or filters</p>
+            <Search size={48} className="mx-auto mb-4 text-gray-300 dark:text-gray-600" />
+            <p className="text-lg font-semibold text-gray-400 dark:text-gray-500">No scholarships match your filters</p>
+            <p className="text-sm text-gray-400 dark:text-gray-500 mt-1">Try adjusting your search or filters</p>
           </motion.div>
         )}
       </div>
@@ -229,29 +226,28 @@ export default function ScholarshipFinder() {
               initial={{ scale: 0.9, y: 20 }}
               animate={{ scale: 1, y: 0 }}
               exit={{ scale: 0.9, y: 20 }}
-              className="relative w-full max-w-[560px] max-h-[80vh] overflow-y-auto rounded-[32px] p-6 md:p-8"
-              style={{ background: 'rgba(255,255,255,0.98)' }}
+              className="relative w-full max-w-[560px] max-h-[80vh] overflow-y-auto rounded-[32px] p-6 md:p-8 bg-white/98 dark:bg-slate-900/98 border border-slate-200 dark:border-slate-700"
               onClick={(e) => e.stopPropagation()}
             >
               <button
                 onClick={() => setSelectedScholar(null)}
-                className="absolute top-4 right-4 w-10 h-10 rounded-full flex items-center justify-center hover:bg-gray-100"
+                className="absolute top-4 right-4 w-10 h-10 rounded-full flex items-center justify-center hover:bg-gray-100 dark:hover:bg-slate-800 transition-colors"
               >
                 <X size={18} />
               </button>
 
-              <div className="flex items-center gap-2 mb-3">
-                <span className="text-[10px] font-semibold px-2.5 py-1 rounded-full bg-[#f6e33630]">{selectedScholar.type}</span>
-                <span className="text-[10px] font-semibold px-2.5 py-1 rounded-full bg-green-50 text-green-700">{selectedScholar.amount}</span>
+              <div className="flex items-center gap-2 mb-3 flex-wrap">
+                <span className="text-[10px] font-semibold px-2.5 py-1 rounded-full bg-yellow-100 dark:bg-yellow-900/30 text-yellow-800 dark:text-yellow-300">{selectedScholar.type}</span>
+                <span className="text-[10px] font-semibold px-2.5 py-1 rounded-full bg-green-50 dark:bg-green-900/30 text-green-700 dark:text-green-300">{selectedScholar.amount}</span>
               </div>
 
               <h2 className="text-xl font-bold mb-2">{selectedScholar.name}</h2>
-              <p className="text-sm leading-relaxed mb-5" style={{ color: 'var(--text-secondary)' }}>
+              <p className="text-sm leading-relaxed mb-5 dark:text-gray-400" style={{ color: 'var(--text-secondary)' }}>
                 {selectedScholar.description}
               </p>
 
               <div className="mb-4">
-                <h4 className="text-xs font-semibold uppercase tracking-wider mb-2 flex items-center gap-1.5">
+                <h4 className="text-xs font-semibold uppercase tracking-wider mb-2 flex items-center gap-1.5 dark:text-gray-300">
                   <Check size={12} /> Eligibility
                 </h4>
                 <ul className="flex flex-col gap-1.5">
@@ -265,7 +261,7 @@ export default function ScholarshipFinder() {
               </div>
 
               <div className="mb-4">
-                <h4 className="text-xs font-semibold uppercase tracking-wider mb-2 flex items-center gap-1.5">
+                <h4 className="text-xs font-semibold uppercase tracking-wider mb-2 flex items-center gap-1.5 dark:text-gray-300">
                   <DollarSign size={12} /> Benefits
                 </h4>
                 <ul className="flex flex-col gap-1.5">
@@ -279,20 +275,20 @@ export default function ScholarshipFinder() {
               </div>
 
               <div className="mb-5">
-                <h4 className="text-xs font-semibold uppercase tracking-wider mb-2 flex items-center gap-1.5">
+                <h4 className="text-xs font-semibold uppercase tracking-wider mb-2 flex items-center gap-1.5 dark:text-gray-300">
                   <Building2 size={12} /> Application Process
                 </h4>
                 <ol className="flex flex-col gap-1.5">
                   {selectedScholar.process.map((p, i) => (
                     <li key={p} className="text-xs flex items-center gap-2">
-                      <span className="w-4 h-4 rounded-full bg-gray-100 flex items-center justify-center text-[9px] font-bold">{i + 1}</span>
+                      <span className="w-4 h-4 rounded-full bg-gray-100 dark:bg-slate-800 flex items-center justify-center text-[9px] font-bold">{i + 1}</span>
                       {p}
                     </li>
                   ))}
                 </ol>
               </div>
 
-              <div className="flex gap-2 pt-4 border-t" style={{ borderColor: 'rgba(0,0,0,0.06)' }}>
+              <div className="flex gap-2 pt-4 border-t border-slate-200 dark:border-slate-700">
                 <button className="flex-1 pill-btn pill-btn-primary text-xs">
                   <Calendar size={13} className="mr-1" /> Add to Calendar
                 </button>
@@ -300,7 +296,7 @@ export default function ScholarshipFinder() {
                   href={selectedScholar.link || '#'}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex-1 pill-btn text-xs bg-black text-white hover:bg-black/80 text-center"
+                  className="flex-1 pill-btn text-xs bg-slate-900 dark:bg-white dark:text-slate-900 text-white hover:bg-slate-800 dark:hover:bg-gray-100 text-center"
                 >
                   Apply Now
                 </a>
