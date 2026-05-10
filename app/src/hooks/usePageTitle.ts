@@ -1,10 +1,10 @@
 import { useEffect } from 'react'
 
 const titles: Record<string, string> = {
-  '/': 'LAPIS — All-in-One Student Command Center for Filipino Students',
-  '/gwa-calculator': 'GWA Calculator Philippines | Compute Your Grade Free — Lapis',
-  '/scholarships': 'Scholarships for Filipino Students 2026 | DOST, SM, CHED — Lapis',
-  '/universities': 'Best Universities in Philippines | Compare Tuition & Courses — Lapis',
+  '/': 'LAPIS — All-in-One Student Command Center',
+  '/gwa-calculator': 'GWA Calculator | Compute Your Grade — Lapis',
+  '/scholarships': 'Scholarship Finder | Discover Funding for Your Studies — Lapis',
+  '/universities': 'University Finder | Compare Schools Worldwide — Lapis',
   '/study': 'Study Tools | Flashcards, Quizzes & AI Learning — Lapis',
   '/focus': 'Focus Timer | Pomodoro & Productivity Tracker — Lapis',
   '/career': 'Career Hub | Jobs, Internships & Salary Guide — Lapis',

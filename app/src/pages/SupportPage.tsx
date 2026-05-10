@@ -60,7 +60,7 @@ function CopyButton({ text }: { text: string }) {
 
 export default function SupportPage() {
   return (
-    <div className="min-h-[100dvh] pt-28 pb-20 px-4 md:px-6" style={{ background: '#f5f2eb' }}>
+    <div className="min-h-[100dvh] pt-28 pb-20 px-4 md:px-6 bg-slate-50 dark:bg-slate-950">
       <div className="max-w-[800px] mx-auto">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-12">
           <div className="w-14 h-14 rounded-2xl flex items-center justify-center mx-auto mb-4" style={{ background: '#f6e33630' }}>

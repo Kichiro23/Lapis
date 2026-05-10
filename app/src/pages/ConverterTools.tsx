@@ -348,33 +348,33 @@ export default function ConverterTools() {
   const [activeTool, setActiveTool] = useState<string | null>(null)
 
   if (activeTool === 'pdf') return (
-    <div className="min-h-[100dvh] pt-24 pb-16 px-4 md:px-6" style={{ background: '#f5f2eb' }}>
+    <div className="min-h-[100dvh] pt-24 pb-16 px-4 md:px-6 bg-slate-50 dark:bg-slate-950">
       <PdfGenerator />
     </div>
   )
   if (activeTool === 'word') return (
-    <div className="min-h-[100dvh] pt-24 pb-16 px-4 md:px-6" style={{ background: '#f5f2eb' }}>
+    <div className="min-h-[100dvh] pt-24 pb-16 px-4 md:px-6 bg-slate-50 dark:bg-slate-950">
       <WordGenerator />
     </div>
   )
   if (activeTool === 'dictionary') return (
-    <div className="min-h-[100dvh] pt-24 pb-16 px-4 md:px-6" style={{ background: '#f5f2eb' }}>
+    <div className="min-h-[100dvh] pt-24 pb-16 px-4 md:px-6 bg-slate-50 dark:bg-slate-950">
       <DictionaryTool />
     </div>
   )
   if (activeTool === 'trivia') return (
-    <div className="min-h-[100dvh] pt-24 pb-16 px-4 md:px-6" style={{ background: '#f5f2eb' }}>
+    <div className="min-h-[100dvh] pt-24 pb-16 px-4 md:px-6 bg-slate-50 dark:bg-slate-950">
       <TriviaTool />
     </div>
   )
   if (activeTool === 'currency') return (
-    <div className="min-h-[100dvh] pt-24 pb-16 px-4 md:px-6" style={{ background: '#f5f2eb' }}>
+    <div className="min-h-[100dvh] pt-24 pb-16 px-4 md:px-6 bg-slate-50 dark:bg-slate-950">
       <CurrencyConverter />
     </div>
   )
 
   return (
-    <div className="min-h-[100dvh] pt-24 pb-16 px-4 md:px-6" style={{ background: '#f5f2eb' }}>
+    <div className="min-h-[100dvh] pt-24 pb-16 px-4 md:px-6 bg-slate-50 dark:bg-slate-950">
       <div className="max-w-[1100px] mx-auto">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
           <div className="flex items-center gap-2 mb-2">

@@ -70,7 +70,7 @@ export default function Dashboard() {
   }, [])
 
   return (
-    <div className="min-h-[100dvh] flex" style={{ background: '#f5f2eb' }}>
+    <div className="min-h-[100dvh] flex bg-slate-50 dark:bg-slate-950">
       {/* Sidebar */}
       <aside
         className={`fixed lg:sticky top-0 left-0 h-[100dvh] z-30 border-r transition-all duration-300 flex flex-col ${

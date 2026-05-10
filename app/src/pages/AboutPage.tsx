@@ -15,7 +15,7 @@ const values = [
   {
     icon: Heart,
     title: 'Built with Love',
-    desc: 'Every feature is designed with Filipino students in mind. No corporate BS, just genuine care.',
+    desc: 'Every feature is designed with students in mind. No corporate BS, just genuine care.',
   },
   {
     icon: Rocket,
@@ -31,7 +31,7 @@ const values = [
 
 export default function AboutPage() {
   return (
-    <div className="min-h-[100dvh] pt-28 pb-20 px-4 md:px-6" style={{ background: '#f5f2eb' }}>
+    <div className="min-h-[100dvh] pt-28 pb-20 px-4 md:px-6 bg-slate-50 dark:bg-slate-950">
       <div className="max-w-[800px] mx-auto">
         {/* Hero */}
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-12">
@@ -45,7 +45,7 @@ export default function AboutPage() {
             Rommel Andrei De Leon
           </h1>
           <p className="text-base" style={{ color: 'var(--text-secondary)' }}>
-            Filipino Developer · Building Tools for Filipino Students
+            Developer · Building Tools for Students Worldwide
           </p>
           <div className="flex items-center justify-center gap-3 mt-4">
             <a
@@ -76,10 +76,10 @@ export default function AboutPage() {
         >
           <h2 className="text-lg font-bold mb-3">Why I Built Lapis</h2>
           <p className="text-sm leading-relaxed mb-4" style={{ color: 'var(--text-secondary)' }}>
-            As a Filipino student, I experienced firsthand the struggle of finding reliable academic tools. Scholarship info was scattered across websites, GWA calculators were either paid or broken, and university data was outdated.
+            As a student, I experienced firsthand the struggle of finding reliable academic tools. Scholarship info was scattered across websites, GWA calculators were either paid or broken, and university data was outdated.
           </p>
           <p className="text-sm leading-relaxed mb-4" style={{ color: 'var(--text-secondary)' }}>
-            Lapis was born from that frustration. I wanted to build a single platform where every Filipino student — whether in Metro Manila or Mindanao — could access powerful, free tools to succeed in their academic journey.
+            Lapis was born from that frustration. I wanted to build a single platform where every student could access powerful, free tools to succeed in their academic journey.
           </p>
           <p className="text-sm leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
             Today, Lapis serves thousands of students with real data, real APIs, and zero cost. My mission is simple: <strong>empower every Filipino student with the tools they deserve.</strong>

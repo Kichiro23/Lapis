@@ -4,7 +4,7 @@ import { Home, Search, ArrowLeft } from 'lucide-react'
 
 export default function NotFound() {
   return (
-    <div className="min-h-[100dvh] flex flex-col items-center justify-center px-6" style={{ background: '#f5f2eb' }}>
+    <div className="min-h-[100dvh] flex flex-col items-center justify-center px-6 bg-slate-50 dark:bg-slate-950">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}

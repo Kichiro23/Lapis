@@ -136,7 +136,7 @@ export default function GWACalculator() {
   }, [calculateGWA])
 
   return (
-    <div className="min-h-[100dvh] pt-24 pb-16 px-4 md:px-6" style={{ background: '#f5f2eb' }}>
+    <div className="min-h-[100dvh] pt-24 pb-16 px-4 md:px-6 bg-slate-50 dark:bg-slate-950">
       <div className="max-w-[1100px] mx-auto">
         {/* Header */}
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
