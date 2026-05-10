@@ -19,6 +19,10 @@ const titles: Record<string, string> = {
   '/tasks': 'Task Manager | Kanban Board for Students — Lapis',
   '/grades': 'Grade Tracker | Monitor Your Academic Progress — Lapis',
   '/resources': 'Resource Hub | Free Learning Resources — Lapis',
+  '/resume': 'Resume Builder | Create Your CV — Lapis',
+  '/humanizer': 'AI Humanizer | Make Text Sound Natural — Lapis',
+  '/ai-detector': 'AI Detector | Analyze Text Authenticity — Lapis',
+  '/corrector': 'Auto Corrector | Fix Grammar & Clarity — Lapis',
 }
 
 export function usePageTitle(pathname: string) {

@@ -3,6 +3,7 @@ import { Link, useLocation } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Menu, X, GraduationCap, Sun, Moon } from 'lucide-react'
 import { useTheme } from 'next-themes'
+import { useAuth } from '../hooks/useAuth'
 import AuthModal from './AuthModal'
 
 const navLinks = [
@@ -12,6 +13,7 @@ const navLinks = [
   { label: 'Study', href: '/study' },
   { label: 'Focus', href: '/focus' },
   { label: 'Career', href: '/career' },
+  { label: 'Resources', href: '/resources' },
 ]
 
 export default function Navbar() {
@@ -22,6 +24,7 @@ export default function Navbar() {
   const [mounted, setMounted] = useState(false)
   const location = useLocation()
   const { theme, setTheme } = useTheme()
+  const { user, logout } = useAuth()
 
   useEffect(() => {
     setMounted(true)
@@ -88,15 +91,31 @@ export default function Navbar() {
 
             {/* Desktop Auth */}
             <div className="hidden lg:flex items-center gap-1 ml-1">
-              <button
-                onClick={openLogin}
-                className="text-sm font-medium text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 px-3 py-1.5 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-all"
-              >
-                Log In
-              </button>
-              <button onClick={openSignup} className="pill-btn pill-btn-primary text-sm py-2 px-4">
-                Sign Up
-              </button>
+              {user ? (
+                <div className="flex items-center gap-2">
+                  <div className="w-8 h-8 rounded-full bg-gradient-to-br from-yellow-400 to-amber-500 flex items-center justify-center text-xs font-bold text-slate-900">
+                    {user.name.charAt(0).toUpperCase()}
+                  </div>
+                  <button
+                    onClick={() => logout()}
+                    className="text-sm font-medium text-slate-500 dark:text-slate-400 hover:text-red-500 px-3 py-1.5 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-all"
+                  >
+                    Log Out
+                  </button>
+                </div>
+              ) : (
+                <>
+                  <button
+                    onClick={openLogin}
+                    className="text-sm font-medium text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 px-3 py-1.5 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-all"
+                  >
+                    Log In
+                  </button>
+                  <button onClick={openSignup} className="pill-btn pill-btn-primary text-sm py-2 px-4">
+                    Sign Up
+                  </button>
+                </>
+              )}
             </div>
 
             {/* Mobile Toggle */}
@@ -148,18 +167,37 @@ export default function Navbar() {
                   </Link>
                 ))}
                 <div className="mt-auto flex flex-col gap-2 pt-4 border-t border-slate-200 dark:border-slate-700">
-                  <button
-                    onClick={() => { setMobileOpen(false); openLogin() }}
-                    className="w-full text-center py-3 rounded-2xl text-slate-600 dark:text-slate-300 font-medium hover:bg-slate-100 dark:hover:bg-slate-800 transition-all"
-                  >
-                    Log In
-                  </button>
-                  <button
-                    onClick={() => { setMobileOpen(false); openSignup() }}
-                    className="pill-btn pill-btn-primary w-full"
-                  >
-                    Sign Up
-                  </button>
+                  {user ? (
+                    <>
+                      <div className="flex items-center gap-2 px-4 py-2">
+                        <div className="w-8 h-8 rounded-full bg-gradient-to-br from-yellow-400 to-amber-500 flex items-center justify-center text-xs font-bold text-slate-900">
+                          {user.name.charAt(0).toUpperCase()}
+                        </div>
+                        <span className="text-sm font-medium text-slate-800 dark:text-slate-200">{user.name}</span>
+                      </div>
+                      <button
+                        onClick={() => { setMobileOpen(false); logout() }}
+                        className="w-full text-center py-3 rounded-2xl text-red-500 font-medium hover:bg-red-50 dark:hover:bg-red-900/20 transition-all"
+                      >
+                        Log Out
+                      </button>
+                    </>
+                  ) : (
+                    <>
+                      <button
+                        onClick={() => { setMobileOpen(false); openLogin() }}
+                        className="w-full text-center py-3 rounded-2xl text-slate-600 dark:text-slate-300 font-medium hover:bg-slate-100 dark:hover:bg-slate-800 transition-all"
+                      >
+                        Log In
+                      </button>
+                      <button
+                        onClick={() => { setMobileOpen(false); openSignup() }}
+                        className="pill-btn pill-btn-primary w-full"
+                      >
+                        Sign Up
+                      </button>
+                    </>
+                  )}
                 </div>
               </motion.div>
             </motion.div>

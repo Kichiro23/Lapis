@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const axios = require('axios');
+const crypto = require('crypto');
 const { PDFDocument, rgb, StandardFonts } = require('pdf-lib');
 const { Document, Packer, Paragraph, TextRun, HeadingLevel, AlignmentType } = require('docx');
 
@@ -9,6 +10,89 @@ app.use(cors());
 app.use(express.json({ limit: '10mb' }));
 
 const PORT = process.env.PORT || 3001;
+
+// ─── Simple In-Memory Auth (no DB needed for MVP) ───
+const users = new Map(); // email -> { id, name, email, passwordHash }
+const sessions = new Map(); // token -> { userId, expires }
+
+const JWT_SECRET = process.env.JWT_SECRET || 'lapis-dev-secret-change-in-production';
+
+function hashPassword(password) {
+  return crypto.createHmac('sha256', JWT_SECRET).update(password).digest('hex');
+}
+
+function generateToken(userId) {
+  const token = crypto.randomBytes(32).toString('hex');
+  sessions.set(token, { userId, expires: Date.now() + 7 * 24 * 60 * 60 * 1000 });
+  return token;
+}
+
+function verifyToken(token) {
+  const session = sessions.get(token);
+  if (!session) return null;
+  if (session.expires < Date.now()) {
+    sessions.delete(token);
+    return null;
+  }
+  return session.userId;
+}
+
+function authMiddleware(req, res, next) {
+  const token = req.headers.authorization?.replace('Bearer ', '');
+  const userId = verifyToken(token);
+  if (!userId) return res.status(401).json({ error: 'Unauthorized' });
+  req.userId = userId;
+  next();
+}
+
+// Auth endpoints
+app.post('/api/register', (req, res) => {
+  const { name, email, password } = req.body;
+  if (!name || !email || !password) {
+    return res.status(400).json({ error: 'Name, email, and password required' });
+  }
+  if (password.length < 6) {
+    return res.status(400).json({ error: 'Password must be at least 6 characters' });
+  }
+  if (users.has(email.toLowerCase())) {
+    return res.status(409).json({ error: 'Email already registered' });
+  }
+  const user = {
+    id: crypto.randomUUID(),
+    name,
+    email: email.toLowerCase(),
+    passwordHash: hashPassword(password),
+    createdAt: new Date().toISOString(),
+  };
+  users.set(email.toLowerCase(), user);
+  const token = generateToken(user.id);
+  res.json({ token, user: { id: user.id, name: user.name, email: user.email } });
+});
+
+app.post('/api/login', (req, res) => {
+  const { email, password } = req.body;
+  if (!email || !password) {
+    return res.status(400).json({ error: 'Email and password required' });
+  }
+  const user = users.get(email.toLowerCase());
+  if (!user || user.passwordHash !== hashPassword(password)) {
+    return res.status(401).json({ error: 'Invalid email or password' });
+  }
+  const token = generateToken(user.id);
+  res.json({ token, user: { id: user.id, name: user.name, email: user.email } });
+});
+
+app.get('/api/me', authMiddleware, (req, res) => {
+  const user = Array.from(users.values()).find(u => u.id === req.userId);
+  if (!user) return res.status(404).json({ error: 'User not found' });
+  res.json({ id: user.id, name: user.name, email: user.email });
+});
+
+app.post('/api/logout', authMiddleware, (req, res) => {
+  const token = req.headers.authorization?.replace('Bearer ', '');
+  sessions.delete(token);
+  res.json({ status: 'ok' });
+});
 
 // ─── Health Check ───
 app.get('/api/health', (req, res) => {
