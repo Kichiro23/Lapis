@@ -1,10 +1,12 @@
-const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
+const API_BASE = import.meta.env.VITE_API_URL || '/api';
 
 async function fetchApi(path: string, options?: RequestInit) {
   const res = await fetch(`${API_BASE}${path}`, options);
   if (!res.ok) {
-    const err = await res.json().catch(() => ({}));
-    throw new Error(err.error || `HTTP ${res.status}`);
+    const text = await res.text().catch(() => '');
+    let err = {};
+    try { err = JSON.parse(text); } catch { /* not json */ }
+    throw new Error((err as any).error || `HTTP ${res.status}`);
   }
   return res.json();
 }

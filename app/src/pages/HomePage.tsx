@@ -17,7 +17,7 @@ import {
   Shield,
   Heart,
 } from 'lucide-react'
-import NeonCoordinateCanvas from '../components/NeonCoordinateCanvas'
+import SafeCanvas from '../components/SafeCanvas'
 
 /* ─── Scroll Reveal Wrapper ─── */
 function Reveal({ children, delay = 0, className = '' }: { children: React.ReactNode; delay?: number; className?: string }) {
@@ -181,7 +181,7 @@ export default function HomePage() {
   return (
     <div className="relative">
       {/* 3D Canvas Background */}
-      <NeonCoordinateCanvas />
+      <SafeCanvas />
 
       {/* Hero Section */}
       <section className="relative min-h-[100dvh] flex flex-col justify-center px-6 z-10 pointer-events-none">

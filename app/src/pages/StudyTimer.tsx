@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { motion } from 'framer-motion'
 import { Play, Pause, RotateCcw, SkipForward, Clock, Flame, Target } from 'lucide-react'
-import AmbientDustVignette from '../components/AmbientDustVignette'
+import SafeDust from '../components/SafeDust'
 
 const MODES = [
   { id: 'pomodoro', label: 'Pomodoro', minutes: 25 },
@@ -79,7 +79,7 @@ export default function StudyTimer() {
 
   return (
     <div className="min-h-[100dvh] relative" style={{ background: '#212529' }}>
-      <AmbientDustVignette />
+      <SafeDust />
 
       <div className="relative z-10 pt-24 pb-16 px-4 md:px-6 flex flex-col items-center justify-center min-h-[100dvh]">
         <motion.div
