@@ -20,7 +20,15 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
   </head>
   <body>
-    <div id="root"></div>
+    <div id="root">
+      <div id="loading" style="display:flex;align-items:center;justify-content:center;height:100vh;background:#f5f2eb;flex-direction:column;gap:16px;">
+        <div style="width:40px;height:40px;border:3px solid #f6e336;border-top-color:transparent;border-radius:50%;animation:spin 1s linear infinite;"></div>
+        <p style="font-family:Inter,sans-serif;font-size:14px;color:#868e96;margin:0;">Loading Lapis...</p>
+      </div>
+    </div>
+    <style>
+      @keyframes spin { to { transform: rotate(360deg); } }
+    </style>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

@@ -1,6 +1,5 @@
-import { useState, useEffect, lazy, Suspense } from 'react'
-
-const AmbientDustVignette = lazy(() => import('./AmbientDustVignette'))
+import { useState, useEffect } from 'react'
+import AmbientDustVignette from './AmbientDustVignette'
 
 export default function SafeDust() {
   const [hasError, setHasError] = useState(false)
@@ -33,11 +32,9 @@ export default function SafeDust() {
   }
 
   return (
-    <Suspense fallback={null}>
-      <ErrorCatcher onError={() => setHasError(true)}>
-        <AmbientDustVignette />
-      </ErrorCatcher>
-    </Suspense>
+    <ErrorCatcher onError={() => setHasError(true)}>
+      <AmbientDustVignette />
+    </ErrorCatcher>
   )
 }
 

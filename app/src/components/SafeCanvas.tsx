@@ -1,6 +1,5 @@
-import { Suspense, lazy, useState, useEffect } from 'react'
-
-const NeonCoordinateCanvas = lazy(() => import('./NeonCoordinateCanvas'))
+import { useState, useEffect } from 'react'
+import NeonCoordinateCanvas from './NeonCoordinateCanvas'
 
 export default function SafeCanvas() {
   const [hasError, setHasError] = useState(false)
@@ -33,25 +32,9 @@ export default function SafeCanvas() {
   }
 
   return (
-    <Suspense
-      fallback={
-        <div
-          style={{
-            position: 'fixed',
-            top: 0,
-            left: 0,
-            width: '100%',
-            height: '100%',
-            zIndex: 0,
-            background: '#f5f2eb',
-          }}
-        />
-      }
-    >
-      <ErrorCatcher onError={() => setHasError(true)}>
-        <NeonCoordinateCanvas />
-      </ErrorCatcher>
-    </Suspense>
+    <ErrorCatcher onError={() => setHasError(true)}>
+      <NeonCoordinateCanvas />
+    </ErrorCatcher>
   )
 }
 
