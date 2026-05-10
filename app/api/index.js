@@ -621,6 +621,295 @@ app.post('/api/gwa-pdf', async (req, res) => {
   }
 });
 
+// ─── AI Endpoints ───
+
+const GROQ_API_KEY = process.env.GROQ_API_KEY;
+const GROQ_URL = 'https://api.groq.com/openai/v1/chat/completions';
+
+// Enhanced knowledge base for fallback when no AI key is available
+const aiKnowledgeBase = {
+  greetings: ['hi', 'hello', 'hey', 'kamusta', 'magandang araw'],
+  topics: {
+    gwa: {
+      keywords: ['gwa', 'grade', 'compute', 'calculate', 'average', 'weighted'],
+      response: 'To compute your GWA: multiply each grade by its units, sum them all, then divide by total units. Example: (1.5 × 3 + 2.0 × 3) / 6 = 1.75. Try our GWA Calculator for automatic computation and PDF export!'
+    },
+    scholarship: {
+      keywords: ['scholarship', 'financial aid', 'grant', 'dost', 'sm foundation', 'ched', 'tes'],
+      response: 'Lapis tracks 8+ real Philippine scholarships: DOST-SEI (₱40k/yr + full tuition), SM Foundation (full tuition + allowance), CHED TES (₱60k/yr), Megaworld (₱50k/yr), Metrobank, Ayala, Aboitiz, and Jollibee Foundation. Visit our Scholarship Finder to filter by your course and GWA!'
+    },
+    university: {
+      keywords: ['university', 'college', 'school', 'up diliman', 'ateneo', 'dlsu', 'ust', 'pup', 'mapua'],
+      response: 'Our University Finder has real data on UP Diliman, Ateneo de Manila, De La Salle University, UST, Mapua, Silliman, MSU-IIT, and more. Compare tuition (free to ₱100k/sem), passing rates, student population, and courses side by side.'
+    },
+    career: {
+      keywords: ['career', 'job', 'internship', 'salary', 'hiring', 'employment'],
+      response: 'Explore real career data in our Career Hub: Computer Science (₱25-80k starting), Engineering (₱22-60k), Nursing (₱20-45k), Business (₱20-50k), Architecture (₱20-40k), and more. Includes interview questions and internship tips.'
+    },
+    study: {
+      keywords: ['study', 'flashcard', 'quiz', 'learn', 'memorize', 'review'],
+      response: 'Our Study Tools include flashcards with spaced repetition, AI-generated quizzes, and a note-taking tool. Use the Focus Timer for Pomodoro sessions (25 min work + 5 min break) to maximize retention.'
+    },
+    focus: {
+      keywords: ['focus', 'timer', 'pomodoro', 'concentration', 'productivity'],
+      response: 'The Focus Timer supports Pomodoro (25 min), custom durations, short breaks (5 min), and long breaks (15 min). It tracks your daily focus time and session count to help build study habits.'
+    },
+    converter: {
+      keywords: ['pdf', 'word', 'document', 'convert', 'generate', 'export'],
+      response: 'Generate professional PDF and Word documents in our Converters section. Great for reports, resumes, study notes, and GWA transcripts. All generated locally — your data never leaves your browser.'
+    },
+    currency: {
+      keywords: ['currency', 'exchange', 'peso', 'usd', 'convert money', 'rate'],
+      response: 'Our Currency Converter uses real-time exchange rates from ExchangeRate-API. Convert PHP to USD, EUR, JPY, and 160+ other currencies with live market data.'
+    },
+    dictionary: {
+      keywords: ['dictionary', 'meaning', 'define', 'word', 'definition', 'synonym'],
+      response: 'Use our Dictionary tool powered by the Free Dictionary API. Look up definitions, pronunciations, examples, and etymology for any English word.'
+    },
+    trivia: {
+      keywords: ['trivia', 'quiz', 'game', 'question', 'knowledge', 'fun'],
+      response: 'Test your knowledge with our Trivia Quiz! Thousands of questions from Open Trivia DB across categories like Science, History, Geography, and Entertainment. Great for study breaks!'
+    },
+    about: {
+      keywords: ['who', 'developer', 'rommel', 'built', 'creator', 'about'],
+      response: 'Lapis was built by Rommel Andrei De Leon, a Filipino developer passionate about empowering students. Contact: rommeld216@gmail.com | GitHub: github.com/Kichiro23'
+    },
+    support: {
+      keywords: ['donate', 'support', 'help', 'contribute', 'gcash', 'paypal'],
+      response: 'You can support Lapis via GCash/Maya (09627905910) or PayPal/Google Pay (rommeld216@gmail.com). Every donation helps keep the platform free for Filipino students!'
+    }
+  }
+};
+
+function getFallbackResponse(message) {
+  const lower = message.toLowerCase().trim();
+
+  // Check greetings
+  if (aiKnowledgeBase.greetings.some(g => lower.includes(g))) {
+    return "Kamusta! I'm Lapis Assistant. I can help with GWA calculations, scholarships, universities, study tips, career guidance, and more. What would you like to know?";
+  }
+
+  // Check topics
+  for (const topic of Object.values(aiKnowledgeBase.topics)) {
+    if (topic.keywords.some(k => lower.includes(k))) {
+      return topic.response;
+    }
+  }
+
+  return "I'm Lapis Assistant, your AI study buddy! I can help with GWA calculation, scholarship searches, university info, study tips, and career guidance. What would you like to know?";
+}
+
+// AI Chat endpoint
+app.post('/api/ai-chat', async (req, res) => {
+  try {
+    const { messages, context } = req.body;
+    if (!messages || !Array.isArray(messages)) {
+      return res.status(400).json({ error: 'Messages array is required' });
+    }
+
+    const lastMessage = messages[messages.length - 1]?.content || '';
+
+    // If no Groq key, use enhanced fallback
+    if (!GROQ_API_KEY) {
+      const response = getFallbackResponse(lastMessage);
+      return res.json({
+        response,
+        source: 'fallback',
+        note: 'Add GROQ_API_KEY environment variable for full AI responses'
+      });
+    }
+
+    const systemPrompt = `You are Lapis Assistant, a helpful AI study assistant for Filipino students. You provide accurate, friendly, and concise answers about academics, scholarships, universities, careers, and study strategies.
+
+Context about the user: ${context || 'Student using Lapis platform'}
+
+Guidelines:
+- Keep responses under 200 words
+- Use Filipino context when relevant (Philippine universities, scholarships, grading systems)
+- Be encouraging and supportive
+- If asked about specific tools, mention that Lapis has them
+- Do not make up scholarship deadlines or amounts — be general if unsure`;
+
+    const groqMessages = [
+      { role: 'system', content: systemPrompt },
+      ...messages.map(m => ({ role: m.sender === 'user' ? 'user' : 'assistant', content: m.text }))
+    ];
+
+    const response = await axios.post(GROQ_URL, {
+      model: 'llama-3.3-70b-versatile',
+      messages: groqMessages,
+      temperature: 0.7,
+      max_tokens: 512,
+    }, {
+      headers: {
+        'Authorization': `Bearer ${GROQ_API_KEY}`,
+        'Content-Type': 'application/json'
+      },
+      timeout: 15000
+    });
+
+    const aiResponse = response.data.choices[0]?.message?.content || 'Sorry, I could not generate a response.';
+    res.json({ response: aiResponse, source: 'groq' });
+  } catch (error) {
+    console.error('AI Chat Error:', error.message);
+    // Fallback on API failure
+    const lastMessage = req.body.messages?.[req.body.messages.length - 1]?.content || '';
+    res.json({
+      response: getFallbackResponse(lastMessage),
+      source: 'fallback',
+      error: 'AI service temporarily unavailable'
+    });
+  }
+});
+
+// AI Essay Grader
+app.post('/api/ai-essay-grade', async (req, res) => {
+  try {
+    const { essay, rubric } = req.body;
+    if (!essay || essay.trim().length < 50) {
+      return res.status(400).json({ error: 'Essay must be at least 50 characters' });
+    }
+
+    if (!GROQ_API_KEY) {
+      // Simple heuristic fallback
+      const wordCount = essay.trim().split(/\s+/).length;
+      const sentences = essay.split(/[.!?]+/).filter(s => s.trim().length > 0).length;
+      const paragraphs = essay.split('\n\n').filter(p => p.trim().length > 0).length;
+
+      return res.json({
+        source: 'fallback',
+        overall: Math.min(95, Math.max(60, 70 + wordCount / 50 + paragraphs * 2)),
+        categories: {
+          structure: Math.min(95, 70 + paragraphs * 3),
+          grammar: 75,
+          argument: Math.min(95, 70 + sentences * 0.5),
+          vocabulary: Math.min(95, 70 + wordCount / 30),
+        },
+        feedback: [
+          `Word count: ${wordCount} words`,
+          `Sentences: ${sentences}`,
+          `Paragraphs: ${paragraphs}`,
+          'Add GROQ_API_KEY for AI-powered detailed feedback.'
+        ],
+        suggestions: [
+          'Ensure each paragraph has a clear topic sentence',
+          'Vary your sentence structure for better flow',
+          'Support arguments with specific examples',
+          'Proofread for grammar and punctuation errors'
+        ]
+      });
+    }
+
+    const prompt = `Grade the following student essay on a scale of 0-100. Provide scores for: Structure, Grammar, Argument Strength, and Vocabulary. Also give 3-4 specific improvement suggestions.
+
+Essay:
+"""${essay}"""
+
+Respond ONLY in valid JSON format:
+{
+  "overall": number,
+  "categories": { "structure": number, "grammar": number, "argument": number, "vocabulary": number },
+  "feedback": ["string"],
+  "suggestions": ["string"]
+}`;
+
+    const response = await axios.post(GROQ_URL, {
+      model: 'llama-3.3-70b-versatile',
+      messages: [{ role: 'user', content: prompt }],
+      temperature: 0.3,
+      max_tokens: 1024,
+      response_format: { type: 'json_object' }
+    }, {
+      headers: {
+        'Authorization': `Bearer ${GROQ_API_KEY}`,
+        'Content-Type': 'application/json'
+      },
+      timeout: 20000
+    });
+
+    const content = response.data.choices[0]?.message?.content || '{}';
+    const result = JSON.parse(content);
+    res.json({ ...result, source: 'groq' });
+  } catch (error) {
+    console.error('Essay Grade Error:', error.message);
+    res.status(500).json({ error: 'Essay grading failed', message: error.message });
+  }
+});
+
+// AI Study Planner
+app.post('/api/ai-study-plan', async (req, res) => {
+  try {
+    const { subjects, examDate, hoursPerDay, preferences } = req.body;
+    if (!subjects || !Array.isArray(subjects) || subjects.length === 0) {
+      return res.status(400).json({ error: 'At least one subject is required' });
+    }
+
+    if (!GROQ_API_KEY) {
+      // Generate a simple study plan without AI
+      const plan = subjects.map((subject, i) => ({
+        subject: subject.name || `Subject ${i + 1}`,
+        sessions: Array.from({ length: 5 }, (_, j) => ({
+          day: `Day ${j + 1}`,
+          duration: preferences?.pomodoro ? '25 min study + 5 min break' : '45 min',
+          focus: j === 0 ? 'Review fundamentals' : j === 4 ? 'Practice problems' : 'Deep study'
+        }))
+      }));
+
+      return res.json({
+        source: 'fallback',
+        plan,
+        tips: [
+          'Study your hardest subject first when your energy is highest',
+          'Use the Pomodoro technique: 25 min focus + 5 min break',
+          'Review notes within 24 hours of class for better retention',
+          'Sleep is essential — aim for 7-8 hours during exam week'
+        ]
+      });
+    }
+
+    const prompt = `Create a study plan for a student with these subjects and constraints. Return ONLY valid JSON.
+
+Subjects: ${subjects.map(s => s.name || s).join(', ')}
+Exam date: ${examDate || 'Not specified'}
+Hours per day: ${hoursPerDay || '4'}
+Preferences: ${JSON.stringify(preferences || {})}
+
+Respond in JSON:
+{
+  "plan": [
+    {
+      "subject": "string",
+      "sessions": [
+        { "day": "string", "duration": "string", "focus": "string", "resources": ["string"] }
+      ]
+    }
+  ],
+  "tips": ["string"]
+}`;
+
+    const response = await axios.post(GROQ_URL, {
+      model: 'llama-3.3-70b-versatile',
+      messages: [{ role: 'user', content: prompt }],
+      temperature: 0.5,
+      max_tokens: 2048,
+      response_format: { type: 'json_object' }
+    }, {
+      headers: {
+        'Authorization': `Bearer ${GROQ_API_KEY}`,
+        'Content-Type': 'application/json'
+      },
+      timeout: 20000
+    });
+
+    const content = response.data.choices[0]?.message?.content || '{}';
+    const result = JSON.parse(content);
+    res.json({ ...result, source: 'groq' });
+  } catch (error) {
+    console.error('Study Plan Error:', error.message);
+    res.status(500).json({ error: 'Study plan generation failed', message: error.message });
+  }
+});
+
 app.listen(PORT, () => {
   console.log(`Lapis API Server running on port ${PORT}`);
 });

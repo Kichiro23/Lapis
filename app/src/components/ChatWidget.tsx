@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { X, Send, Sparkles, Bot, User } from 'lucide-react'
+import { X, Send, Sparkles, Bot, User, WifiOff } from 'lucide-react'
+import { api } from '../lib/api'
 
 interface Message {
   id: string
@@ -16,32 +17,19 @@ const quickReplies = [
   'Pomodoro technique tips',
 ]
 
-const knowledgeBase: Record<string, string> = {
-  'How do I compute my GWA?':
-    'To compute your GWA, add up all (Grade x Units) for each subject, then divide by the total number of units. For example, if you got 1.5 in a 3-unit subject and 2.0 in a 3-unit subject: (1.5x3 + 2.0x3) / 6 = 1.75. Try our GWA Calculator tool!',
-  'Find scholarships for STEM':
-    'Great choice! For STEM students in the Philippines, check out: DOST-SEI Scholarship (₱40k/yr + full tuition), SM Foundation Scholarship (full tuition + allowance), Megaworld Foundation Scholarship (₱50k/yr), and CHED TES (₱60k/yr). Most require a GWA of 2.0 or better. Head to our Scholarship Finder for more!',
-  'Best universities in Manila':
-    'Top universities in Manila include: UP Diliman (ranked #1 in PH, free tuition), Ateneo de Manila (₱80-100k/sem), De La Salle University (₱70-95k/sem), UST (₱50-70k/sem), and PUP (free, 70k+ students). Check our University Finder for detailed comparisons!',
-  'Pomodoro technique tips':
-    'The Pomodoro Technique: Work for 25 minutes, then take a 5-minute break. After 4 cycles, take a longer 15-30 minute break. Tips: Remove distractions, have a specific task ready, use our Focus Timer tool, and stay consistent. Small breaks prevent burnout!',
-}
-
-const defaultResponse =
-  "I'm Lapis Assistant, your AI study buddy! I can help with GWA calculation, scholarship searches, university info, study tips, and career guidance. What would you like to know?"
-
 export default function ChatWidget() {
   const [open, setOpen] = useState(false)
   const [messages, setMessages] = useState<Message[]>([
     {
       id: 'welcome',
-      text: "Kamusta! I'm Lapis Assistant. How can I help you today?",
+      text: "Kamusta! I'm Lapis Assistant. I can help with GWA, scholarships, universities, study tips, and more. What would you like to know?",
       sender: 'ai',
       timestamp: new Date(),
     },
   ])
   const [input, setInput] = useState('')
   const [typing, setTyping] = useState(false)
+  const [usingFallback, setUsingFallback] = useState(false)
   const scrollRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -50,7 +38,7 @@ export default function ChatWidget() {
     }
   }, [messages, typing])
 
-  const sendMessage = (text: string) => {
+  const sendMessage = async (text: string) => {
     if (!text.trim()) return
 
     const userMsg: Message = {
@@ -63,37 +51,38 @@ export default function ChatWidget() {
     setMessages((prev) => [...prev, userMsg])
     setInput('')
     setTyping(true)
+    setUsingFallback(false)
 
-    // Smart response logic
-    setTimeout(async () => {
-      let response = knowledgeBase[text.trim()]
-      if (!response) {
-        const lower = text.trim().toLowerCase()
-        if (lower.includes('scholarship') || lower.includes('financial aid')) {
-          response = 'We have 8+ real scholarship programs in our database including DOST-SEI, SM Foundation, CHED TES, Megaworld, Metrobank, Ayala, Aboitiz, and Jollibee Foundation. Visit our Scholarship Finder to filter by type, course, and GWA requirements!'
-        } else if (lower.includes('university') || lower.includes('college')) {
-          response = 'Our University Finder has real data on 10+ Philippine universities including UP Diliman, Ateneo, DLSU, UST, Mapua, Silliman, and more. You can compare tuition, passing rates, and courses side by side!'
-        } else if (lower.includes('gwa') || lower.includes('grade')) {
-          response = 'Use our GWA Calculator to track your grades, predict honors standing (Cum Laude, Magna, Summa), and generate a PDF report. It supports UP\'s 1.00-5.00 scale and other grading systems!'
-        } else if (lower.includes('career') || lower.includes('job') || lower.includes('internship')) {
-          response = 'Our Career Hub has real career data for courses like Computer Science, Engineering, Nursing, Business, and more. Explore salary ranges, internship opportunities, and interview questions!'
-        } else if (lower.includes('pdf') || lower.includes('document')) {
-          response = 'You can generate PDF and Word documents in our Converters section. Great for creating reports, resumes, and study notes!'
-        } else if (lower.includes('timer') || lower.includes('focus') || lower.includes('pomodoro')) {
-          response = 'Our Focus Timer supports Pomodoro (25 min), short breaks (5 min), long breaks (15 min), and custom durations. It tracks your daily sessions and focus time!'
-        } else {
-          response = defaultResponse
-        }
-      }
+    try {
+      const history = [...messages, userMsg].map((m) => ({
+        sender: m.sender,
+        text: m.text,
+      }))
+
+      const data = await api.aiChat(history, 'Student using Lapis platform')
+
       const aiMsg: Message = {
         id: (Date.now() + 1).toString(),
-        text: response,
+        text: data.response || 'Sorry, I could not process that.',
+        sender: 'ai',
+        timestamp: new Date(),
+      }
+
+      setMessages((prev) => [...prev, aiMsg])
+      if (data.source === 'fallback') {
+        setUsingFallback(true)
+      }
+    } catch (error) {
+      const aiMsg: Message = {
+        id: (Date.now() + 1).toString(),
+        text: "Sorry, I'm having trouble connecting right now. Please try again in a moment.",
         sender: 'ai',
         timestamp: new Date(),
       }
       setMessages((prev) => [...prev, aiMsg])
+    } finally {
       setTyping(false)
-    }, 1200)
+    }
   }
 
   return (
@@ -152,7 +141,7 @@ export default function ChatWidget() {
                 <p className="text-sm font-semibold">Lapis Assistant</p>
                 <p className="text-[11px] text-green-600 flex items-center gap-1">
                   <span className="w-1.5 h-1.5 rounded-full bg-green-500 inline-block" />
-                  Online
+                  {usingFallback ? 'Smart Mode (Offline)' : 'AI Powered'}
                 </p>
               </div>
               <button
@@ -216,8 +205,16 @@ export default function ChatWidget() {
               )}
             </div>
 
+            {/* Fallback notice */}
+            {usingFallback && (
+              <div className="px-4 py-2 flex items-center gap-1.5 text-[10px] text-amber-600 bg-amber-50">
+                <WifiOff size={10} />
+                Running in smart mode. Add GROQ_API_KEY for full AI responses.
+              </div>
+            )}
+
             {/* Quick Replies */}
-            {messages.length <= 2 && (
+            {messages.length <= 2 && !typing && (
               <div className="px-4 pb-2 flex flex-wrap gap-1.5">
                 {quickReplies.map((reply) => (
                   <button
@@ -251,9 +248,9 @@ export default function ChatWidget() {
                 />
                 <button
                   type="submit"
-                  disabled={!input.trim()}
+                  disabled={!input.trim() || typing}
                   className="w-9 h-9 rounded-full flex items-center justify-center transition-all disabled:opacity-40"
-                  style={{ background: input.trim() ? 'var(--accent-yellow)' : '#e9e7e0' }}
+                  style={{ background: input.trim() && !typing ? 'var(--accent-yellow)' : '#e9e7e0' }}
                 >
                   <Send size={14} color="#333" />
                 </button>

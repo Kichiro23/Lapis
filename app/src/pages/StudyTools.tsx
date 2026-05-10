@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import {
   Layers,
@@ -12,6 +13,8 @@ import {
   ChevronLeft,
   Loader2,
   Search,
+  PenTool,
+  Calendar,
 } from 'lucide-react'
 import { api } from '../lib/api'
 
@@ -42,6 +45,23 @@ const tools = [
     title: 'Dictionary',
     description: 'Look up definitions, pronunciations, and examples.',
     color: '#d2f754',
+  },
+]
+
+const aiTools = [
+  {
+    icon: PenTool,
+    title: 'AI Essay Grader',
+    description: 'Get instant AI feedback on your essays — structure, grammar, argument, and vocabulary.',
+    color: '#f6e336',
+    href: '/essay-grader',
+  },
+  {
+    icon: Calendar,
+    title: 'AI Study Planner',
+    description: 'Generate a personalized study schedule based on your subjects and exam dates.',
+    color: '#7cf0bd',
+    href: '/study-planner',
   },
 ]
 
@@ -194,8 +214,44 @@ export default function StudyTools() {
           ))}
         </div>
 
+        {/* AI Tools */}
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.35 }} className="mt-10">
+          <div className="flex items-center gap-2 mb-4">
+            <Wand2 size={16} style={{ color: '#f5a623' }} />
+            <h3 className="text-sm font-bold uppercase tracking-wider" style={{ color: '#f5a623' }}>AI Powered Tools</h3>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {aiTools.map((tool, i) => (
+              <motion.div
+                key={tool.title}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.4 + i * 0.08 }}
+              >
+                <Link
+                  to={tool.href}
+                  className="glass-card p-6 block group"
+                >
+                  <div className="flex items-start gap-4">
+                    <div className="w-12 h-12 rounded-2xl flex items-center justify-center flex-shrink-0" style={{ background: `${tool.color}30` }}>
+                      <tool.icon size={22} style={{ color: '#333' }} />
+                    </div>
+                    <div className="flex-1">
+                      <h3 className="text-lg font-bold mb-1 group-hover:text-yellow-700 transition-colors">{tool.title}</h3>
+                      <p className="text-sm mb-3" style={{ color: 'var(--text-secondary)' }}>{tool.description}</p>
+                      <span className="inline-flex items-center gap-1 text-xs font-semibold group-hover:gap-2 transition-all">
+                        Open Tool <ArrowRight size={12} />
+                      </span>
+                    </div>
+                  </div>
+                </Link>
+              </motion.div>
+            ))}
+          </div>
+        </motion.div>
+
         {/* Trivia Preview */}
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }} className="glass-card p-8 mt-6 text-center">
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }} className="glass-card p-8 mt-6 text-center">
           <Wand2 size={28} className="mx-auto mb-3" style={{ color: '#f5a623' }} />
           <h3 className="text-lg font-bold mb-2">Trivia Quiz</h3>
           <p className="text-sm mb-4 max-w-md mx-auto" style={{ color: 'var(--text-secondary)' }}>

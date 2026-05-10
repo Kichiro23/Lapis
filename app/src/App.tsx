@@ -1,18 +1,34 @@
+import { Suspense, lazy } from 'react'
 import { Routes, Route, useLocation } from 'react-router-dom'
 import { AnimatePresence, motion } from 'framer-motion'
 import Navbar from './components/Navbar'
 import Footer from './components/Footer'
 import ChatWidget from './components/ChatWidget'
-import HomePage from './pages/HomePage'
-import GWACalculator from './pages/GWACalculator'
-import ScholarshipFinder from './pages/ScholarshipFinder'
-import UniversityFinder from './pages/UniversityFinder'
-import StudyTools from './pages/StudyTools'
-import StudyTimer from './pages/StudyTimer'
-import CareerHub from './pages/CareerHub'
-import Dashboard from './pages/Dashboard'
-import SettingsPage from './pages/SettingsPage'
-import ConverterTools from './pages/ConverterTools'
+import PageLoader from './components/PageLoader'
+import { usePageTitle } from './hooks/usePageTitle'
+
+/* ─── Lazy-loaded pages ─── */
+const HomePage = lazy(() => import('./pages/HomePage'))
+const GWACalculator = lazy(() => import('./pages/GWACalculator'))
+const ScholarshipFinder = lazy(() => import('./pages/ScholarshipFinder'))
+const UniversityFinder = lazy(() => import('./pages/UniversityFinder'))
+const StudyTools = lazy(() => import('./pages/StudyTools'))
+const StudyTimer = lazy(() => import('./pages/StudyTimer'))
+const CareerHub = lazy(() => import('./pages/CareerHub'))
+const Dashboard = lazy(() => import('./pages/Dashboard'))
+const SettingsPage = lazy(() => import('./pages/SettingsPage'))
+const ConverterTools = lazy(() => import('./pages/ConverterTools'))
+const EssayGrader = lazy(() => import('./pages/EssayGrader'))
+const StudyPlanner = lazy(() => import('./pages/StudyPlanner'))
+const TaskManager = lazy(() => import('./pages/TaskManager'))
+const GradeTracker = lazy(() => import('./pages/GradeTracker'))
+const ResourceHub = lazy(() => import('./pages/ResourceHub'))
+const NotFound = lazy(() => import('./pages/NotFound'))
+
+/* Phase 2 pages — placeholders will be replaced */
+const SubscribePage = lazy(() => import('./pages/SubscribePage'))
+const SupportPage = lazy(() => import('./pages/SupportPage'))
+const AboutPage = lazy(() => import('./pages/AboutPage'))
 
 const pageTransition = {
   initial: { opacity: 0, y: 20 },
@@ -23,6 +39,8 @@ const pageTransition = {
 
 function AnimatedRoutes() {
   const location = useLocation()
+  usePageTitle(location.pathname)
+
   return (
     <AnimatePresence mode="wait">
       <motion.div
@@ -32,18 +50,29 @@ function AnimatedRoutes() {
         exit={pageTransition.exit}
         transition={pageTransition.transition}
       >
-        <Routes location={location}>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/gwa-calculator" element={<GWACalculator />} />
-          <Route path="/scholarships" element={<ScholarshipFinder />} />
-          <Route path="/universities" element={<UniversityFinder />} />
-          <Route path="/study" element={<StudyTools />} />
-          <Route path="/focus" element={<StudyTimer />} />
-          <Route path="/career" element={<CareerHub />} />
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/settings" element={<SettingsPage />} />
-          <Route path="/converters" element={<ConverterTools />} />
-        </Routes>
+        <Suspense fallback={<PageLoader />}>
+          <Routes location={location}>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/gwa-calculator" element={<GWACalculator />} />
+            <Route path="/scholarships" element={<ScholarshipFinder />} />
+            <Route path="/universities" element={<UniversityFinder />} />
+            <Route path="/study" element={<StudyTools />} />
+            <Route path="/focus" element={<StudyTimer />} />
+            <Route path="/career" element={<CareerHub />} />
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/settings" element={<SettingsPage />} />
+            <Route path="/converters" element={<ConverterTools />} />
+            <Route path="/subscribe" element={<SubscribePage />} />
+            <Route path="/support" element={<SupportPage />} />
+            <Route path="/about" element={<AboutPage />} />
+            <Route path="/essay-grader" element={<EssayGrader />} />
+            <Route path="/study-planner" element={<StudyPlanner />} />
+            <Route path="/tasks" element={<TaskManager />} />
+            <Route path="/grades" element={<GradeTracker />} />
+            <Route path="/resources" element={<ResourceHub />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </Suspense>
       </motion.div>
     </AnimatePresence>
   )

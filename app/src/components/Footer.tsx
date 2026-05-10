@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { GraduationCap, Github, Mail, Twitter } from 'lucide-react'
+import { GraduationCap, Github, Mail, Twitter, Heart } from 'lucide-react'
 
 const footerLinks = {
   Tools: [
@@ -9,16 +9,21 @@ const footerLinks = {
     { label: 'Study Tools', href: '/study' },
     { label: 'Focus Timer', href: '/focus' },
     { label: 'Career Hub', href: '/career' },
+    { label: 'Task Manager', href: '/tasks' },
+    { label: 'Grade Tracker', href: '/grades' },
+    { label: 'Resource Hub', href: '/resources' },
     { label: 'Converters', href: '/converters' },
   ],
   Account: [
     { label: 'Dashboard', href: '/dashboard' },
     { label: 'Settings', href: '/settings' },
+    { label: 'Subscribe', href: '/subscribe' },
   ],
   About: [
+    { label: 'About the Developer', href: '/about' },
+    { label: 'Support Us', href: '/support' },
     { label: 'Privacy Policy', href: '#' },
     { label: 'Terms of Use', href: '#' },
-    { label: 'Developer Info', href: '#' },
   ],
 }
 
@@ -39,13 +44,13 @@ export default function Footer() {
               Your Launchpad to Success. Built with love in the Philippines for Filipino students.
             </p>
             <div className="flex items-center gap-2">
-              <a href="#" className="w-9 h-9 rounded-full border flex items-center justify-center hover:bg-yellow-100 transition-colors" style={{ borderColor: 'rgba(0,0,0,0.1)' }}>
+              <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="w-9 h-9 rounded-full border flex items-center justify-center hover:bg-yellow-100 transition-colors" style={{ borderColor: 'rgba(0,0,0,0.1)' }}>
                 <Twitter size={14} />
               </a>
-              <a href="#" className="w-9 h-9 rounded-full border flex items-center justify-center hover:bg-yellow-100 transition-colors" style={{ borderColor: 'rgba(0,0,0,0.1)' }}>
+              <a href="https://github.com/Kichiro23" target="_blank" rel="noopener noreferrer" className="w-9 h-9 rounded-full border flex items-center justify-center hover:bg-yellow-100 transition-colors" style={{ borderColor: 'rgba(0,0,0,0.1)' }}>
                 <Github size={14} />
               </a>
-              <a href="#" className="w-9 h-9 rounded-full border flex items-center justify-center hover:bg-yellow-100 transition-colors" style={{ borderColor: 'rgba(0,0,0,0.1)' }}>
+              <a href="mailto:rommeld216@gmail.com" className="w-9 h-9 rounded-full border flex items-center justify-center hover:bg-yellow-100 transition-colors" style={{ borderColor: 'rgba(0,0,0,0.1)' }}>
                 <Mail size={14} />
               </a>
             </div>
@@ -74,10 +79,10 @@ export default function Footer() {
         {/* Bottom Bar */}
         <div className="mt-12 pt-6 border-t flex flex-col sm:flex-row items-center justify-between gap-4" style={{ borderColor: 'rgba(0,0,0,0.06)' }}>
           <p className="text-xs text-gray-400">
-            &copy; {new Date().getFullYear()} Lapis — Student Success Platform. Built with love in the Philippines.
+            &copy; {new Date().getFullYear()} Lapis — Student Success Platform. Built with <Heart size={10} className="inline text-red-400" /> in the Philippines.
           </p>
           <p className="text-xs text-gray-400">
-            Developer: Rommel Andrei De Leon
+            Developer: <a href="/about" className="hover:text-gray-600 transition-colors">Rommel Andrei De Leon</a>
           </p>
         </div>
       </div>

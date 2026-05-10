@@ -37,32 +37,6 @@ const quickActions = [
   { icon: FileText, label: 'PDF Tools', href: '/converters', color: '#d2f754' },
 ]
 
-const [deadlines, setDeadlines] = useState([
-  { title: 'DOST Scholarship Application', date: 'Aug 30', daysLeft: 15, urgent: true },
-  { title: 'Midterm Exams Week', date: 'Sep 12', daysLeft: 28, urgent: false },
-  { title: 'UP Law Application', date: 'Oct 1', daysLeft: 47, urgent: false },
-])
-
-const [recentActivity, setRecentActivity] = useState([
-  { action: 'Calculated GWA', detail: 'Result: 1.75 — Cum Laude standing', time: '2h ago' },
-  { action: 'Found 4 scholarships', detail: 'Matching your STEM profile', time: '5h ago' },
-  { action: 'Completed Focus Session', detail: '25 min Pomodoro — Physics study', time: '1d ago' },
-])
-
-const [scholarshipCount, setScholarshipCount] = useState(0)
-const [uniCount, setUniCount] = useState(0)
-
-useEffect(() => {
-  fetch('/api/scholarships')
-    .then((r) => r.json())
-    .then((data) => setScholarshipCount(data.length))
-    .catch(() => {})
-  fetch('/api/ph-universities')
-    .then((r) => r.json())
-    .then((data) => setUniCount(data.length))
-    .catch(() => {})
-}, [])
-
 export default function Dashboard() {
   const [collapsed, setCollapsed] = useState(false)
   const [greeting] = useState(() => {
@@ -71,6 +45,29 @@ export default function Dashboard() {
     if (hour < 18) return 'Good afternoon'
     return 'Good evening'
   })
+  const [deadlines] = useState([
+    { title: 'DOST Scholarship Application', date: 'Aug 30', daysLeft: 15, urgent: true },
+    { title: 'Midterm Exams Week', date: 'Sep 12', daysLeft: 28, urgent: false },
+    { title: 'UP Law Application', date: 'Oct 1', daysLeft: 47, urgent: false },
+  ])
+  const [recentActivity] = useState([
+    { action: 'Calculated GWA', detail: 'Result: 1.75 — Cum Laude standing', time: '2h ago' },
+    { action: 'Found 4 scholarships', detail: 'Matching your STEM profile', time: '5h ago' },
+    { action: 'Completed Focus Session', detail: '25 min Pomodoro — Physics study', time: '1d ago' },
+  ])
+  const [scholarshipCount, setScholarshipCount] = useState(0)
+  const [uniCount, setUniCount] = useState(0)
+
+  useEffect(() => {
+    fetch('/api/scholarships')
+      .then((r) => r.json())
+      .then((data) => setScholarshipCount(data.length))
+      .catch(() => {})
+    fetch('/api/ph-universities')
+      .then((r) => r.json())
+      .then((data) => setUniCount(data.length))
+      .catch(() => {})
+  }, [])
 
   return (
     <div className="min-h-[100dvh] flex" style={{ background: '#f5f2eb' }}>

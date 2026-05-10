@@ -4,31 +4,142 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Lapis — All-in-One Student Success Platform for Filipino Students</title>
-    <meta name="description" content="Lapis is the ultimate student platform for Filipino students. GWA calculator, scholarship finder, university database, career hub, focus timer, PDF/Word converters, dictionary, trivia quiz, and real-time currency converter." />
-    <meta name="keywords" content="Filipino students, GWA calculator, scholarships Philippines, university finder, study tools, career guidance, Pomodoro timer, PDF converter, student platform" />
+    <meta name="description" content="Lapis is the ultimate free student platform for Filipino students. GWA calculator, scholarship finder (DOST, SM, CHED), university database, career hub, focus timer, PDF/Word generators, and AI study tools." />
+    <meta name="keywords" content="Filipino students, GWA calculator Philippines, scholarships Philippines 2026, university finder Philippines, study tools, career guidance Philippines, Pomodoro timer, PDF converter, student platform Philippines, DOST scholarship, CHED TES, free tuition Philippines, best universities Philippines, cum laude calculator, grade calculator" />
     <meta name="author" content="Rommel Andrei De Leon" />
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
     <meta name="theme-color" content="#f6e336" />
-    <meta property="og:title" content="Lapis — Student Success Platform" />
-    <meta property="og:description" content="All-in-one platform for Filipino students. GWA calculator, scholarships, universities, career hub, and more." />
+    <meta name="msapplication-TileColor" content="#f6e336" />
+    <link rel="canonical" href="https://lapis-2026.vercel.app/" />
+    <link rel="manifest" href="/manifest.json" />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:site_name" content="Lapis" />
+    <meta property="og:title" content="Lapis — All-in-One Student Success Platform for Filipino Students" />
+    <meta property="og:description" content="Free GWA calculator, scholarship finder, university database, career hub, focus timer, and AI study tools built for Filipino students." />
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://lapis-student.vercel.app" />
+    <meta property="og:url" content="https://lapis-2026.vercel.app/" />
+    <meta property="og:image" content="https://lapis-2026.vercel.app/og-image.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:locale" content="en_PH" />
+
+    <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Lapis — Student Success Platform" />
-    <meta name="twitter:description" content="All-in-one platform for Filipino students. GWA calculator, scholarships, universities, career hub, and more." />
+    <meta name="twitter:title" content="Lapis — All-in-One Student Success Platform for Filipino Students" />
+    <meta name="twitter:description" content="Free GWA calculator, scholarship finder, university database, career hub, focus timer, and AI study tools built for Filipino students." />
+    <meta name="twitter:image" content="https://lapis-2026.vercel.app/og-image.png" />
+    <meta name="twitter:creator" content="@Kichiro23" />
+
+    <!-- Preconnect for performance -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
+    <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
+    <link rel="dns-prefetch" href="https://api.dictionaryapi.dev" />
+    <link rel="dns-prefetch" href="https://api.exchangerate-api.com" />
+
+    <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+
+    <!-- Structured Data: Organization + WebSite + FAQPage -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "Organization",
+          "@id": "https://lapis-2026.vercel.app/#organization",
+          "name": "Lapis",
+          "url": "https://lapis-2026.vercel.app/",
+          "logo": "https://lapis-2026.vercel.app/logo.png",
+          "founder": {
+            "@type": "Person",
+            "name": "Rommel Andrei De Leon",
+            "email": "rommeld216@gmail.com",
+            "url": "https://github.com/Kichiro23"
+          },
+          "description": "Free all-in-one student platform for Filipino students with GWA calculator, scholarship finder, university database, and study tools.",
+          "sameAs": [
+            "https://github.com/Kichiro23/Lapis"
+          ]
+        },
+        {
+          "@type": "WebSite",
+          "@id": "https://lapis-2026.vercel.app/#website",
+          "url": "https://lapis-2026.vercel.app/",
+          "name": "Lapis — Student Success Platform",
+          "description": "All-in-one platform for Filipino students",
+          "publisher": {
+            "@id": "https://lapis-2026.vercel.app/#organization"
+          },
+          "potentialAction": {
+            "@type": "SearchAction",
+            "target": {
+              "@type": "EntryPoint",
+              "urlTemplate": "https://lapis-2026.vercel.app/#/universities?q={search_term_string}"
+            },
+            "query-input": "required name=search_term_string"
+          }
+        },
+        {
+          "@type": "FAQPage",
+          "@id": "https://lapis-2026.vercel.app/#faq",
+          "mainEntity": [
+            {
+              "@type": "Question",
+              "name": "Is Lapis free to use?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes, Lapis is completely free for all Filipino students. All core tools including the GWA calculator, scholarship finder, and university database are available at no cost."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "How do I compute my GWA using Lapis?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Enter your subjects, units, and grades into the GWA Calculator. Lapis automatically computes your General Weighted Average, predicts your honors standing (Cum Laude, Magna Cum Laude, Summa Cum Laude), and generates a PDF report."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "What scholarships are available for Filipino students?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Lapis tracks real scholarships including DOST-SEI (₱40k/year + full tuition), SM Foundation (full tuition + allowance), CHED TES (₱60k/year), Megaworld Foundation, Metrobank, Ayala Foundation, Aboitiz Foundation, and Jollibee Foundation scholarships."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Can I use Lapis on my phone?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes, Lapis is fully responsive and works on mobile phones, tablets, and desktop computers. You can also install it as a Progressive Web App (PWA) for offline access."
+              }
+            }
+          ]
+        }
+      ]
+    }
+    </script>
+
+    <style>
+      /* Critical CSS for above-the-fold content */
+      *,*::before,*::after{box-sizing:border-box;margin:0}
+      html{-webkit-text-size-adjust:100%;-moz-tab-size:4;tab-size:4}
+      body{font-family:Inter,system-ui,-apple-system,sans-serif;background:#f5f2eb;color:#1a1a1a;line-height:1.5;-webkit-font-smoothing:antialiased}
+      #loading{display:flex;align-items:center;justify-content:center;height:100vh;background:#f5f2eb;flex-direction:column;gap:16px}
+      @keyframes spin{to{transform:rotate(360deg)}}
+    </style>
   </head>
   <body>
     <div id="root">
-      <div id="loading" style="display:flex;align-items:center;justify-content:center;height:100vh;background:#f5f2eb;flex-direction:column;gap:16px;">
+      <div id="loading">
         <div style="width:40px;height:40px;border:3px solid #f6e336;border-top-color:transparent;border-radius:50%;animation:spin 1s linear infinite;"></div>
         <p style="font-family:Inter,sans-serif;font-size:14px;color:#868e96;margin:0;">Loading Lapis...</p>
       </div>
     </div>
-    <style>
-      @keyframes spin { to { transform: rotate(360deg); } }
-    </style>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

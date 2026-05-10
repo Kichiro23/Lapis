@@ -51,14 +51,14 @@ export default function UniversityFinder() {
     })
   }
 
-  const filtered = UNIVERSITIES.filter((u) => {
+  const filtered = universities.filter((u) => {
     const matchSearch = u.name.toLowerCase().includes(search.toLowerCase()) || u.location.toLowerCase().includes(search.toLowerCase())
     const matchRegion = region === 'All' || u.region === region
     const matchType = type === 'All' || u.type === type
     return matchSearch && matchRegion && matchType
   })
 
-  const comparedUnis = UNIVERSITIES.filter((u) => compareList.includes(u.id))
+  const comparedUnis = universities.filter((u) => compareList.includes(u.id))
 
   return (
     <div className="min-h-[100dvh] pt-24 pb-16 px-4 md:px-6" style={{ background: '#f5f2eb' }}>

@@ -79,6 +79,30 @@ export const api = {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data),
     }),
+
+  // AI Chat
+  aiChat: (messages: { sender: 'user' | 'ai'; text: string }[], context?: string) =>
+    fetch(`${API_BASE}/ai-chat`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ messages, context }),
+    }).then(r => r.json()),
+
+  // AI Essay Grade
+  aiEssayGrade: (essay: string, rubric?: string) =>
+    fetch(`${API_BASE}/ai-essay-grade`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ essay, rubric }),
+    }).then(r => r.json()),
+
+  // AI Study Plan
+  aiStudyPlan: (subjects: { name: string; priority?: string }[], examDate?: string, hoursPerDay?: number, preferences?: any) =>
+    fetch(`${API_BASE}/ai-study-plan`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ subjects, examDate, hoursPerDay, preferences }),
+    }).then(r => r.json()),
 };
 
 // Helper to download blob

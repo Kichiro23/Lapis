@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { Menu, X, GraduationCap } from 'lucide-react'
+import { Menu, X, GraduationCap, Heart } from 'lucide-react'
 import AuthModal from './AuthModal'
 
 const navLinks = [
@@ -12,6 +12,7 @@ const navLinks = [
   { label: 'Focus', href: '/focus' },
   { label: 'Career', href: '/career' },
   { label: 'Converters', href: '/converters' },
+  { label: 'Resources', href: '/resources' },
 ]
 
 export default function Navbar() {
@@ -74,6 +75,12 @@ export default function Navbar() {
 
           {/* Right Actions */}
           <div className="hidden lg:flex items-center gap-2 pr-1">
+            <Link
+              to="/support"
+              className="text-sm font-medium text-gray-500 hover:text-gray-800 px-3 py-1.5 rounded-full hover:bg-gray-100 transition-all duration-200 flex items-center gap-1"
+            >
+              <Heart size={14} /> Support
+            </Link>
             <button
               onClick={openLogin}
               className="text-sm font-medium text-gray-500 hover:text-gray-800 px-4 py-1.5 rounded-full hover:bg-gray-100 transition-all duration-200"
@@ -123,6 +130,26 @@ export default function Navbar() {
                   {link.label}
                 </Link>
               ))}
+              <Link
+                to="/support"
+                className={`text-base font-medium px-4 py-3 rounded-2xl transition-all flex items-center gap-2 ${
+                  location.pathname === '/support'
+                    ? 'bg-yellow-100 text-yellow-700'
+                    : 'text-gray-600 hover:bg-gray-100'
+                }`}
+              >
+                <Heart size={16} /> Support Us
+              </Link>
+              <Link
+                to="/about"
+                className={`text-base font-medium px-4 py-3 rounded-2xl transition-all ${
+                  location.pathname === '/about'
+                    ? 'bg-yellow-100 text-yellow-700'
+                    : 'text-gray-600 hover:bg-gray-100'
+                }`}
+              >
+                About
+              </Link>
               <div className="mt-auto flex flex-col gap-2 pt-4 border-t">
                 <button
                   onClick={() => { setMobileOpen(false); openLogin() }}
