@@ -266,8 +266,9 @@ function TriviaTool() {
                       isSelected ? 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-800 dark:text-yellow-300 border border-yellow-300 dark:border-yellow-700' :
                       'bg-gray-50 dark:bg-slate-800 hover:bg-gray-100 dark:hover:bg-slate-700 border border-transparent dark:border-slate-700 dark:text-gray-300'
                     }`}
+                  >
                     {decodeHtml(ans)}
-                  />
+                  </button>
                 )
               })}
             </div>
